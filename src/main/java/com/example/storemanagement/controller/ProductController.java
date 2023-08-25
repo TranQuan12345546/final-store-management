@@ -11,6 +11,7 @@ import com.example.storemanagement.enity.Supplier;
 import com.example.storemanagement.exception.BadRequestException;
 import com.example.storemanagement.repository.ProductRepository;
 import com.example.storemanagement.service.*;
+import io.swagger.v3.oas.annotations.Operation;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -120,7 +121,7 @@ public class ProductController {
 
     // Danh sách API
     // 1. Tạo sản phẩm
-
+    @Operation(summary = "Tạo sản phẩm mới")
     @PostMapping ("/{storeId}/create")
     public ResponseEntity<?> createProduct(@PathVariable Integer storeId,
                                            @RequestParam(value = "codeNumber",required = false) String codeNumber,
@@ -159,6 +160,7 @@ public class ProductController {
     }
 
     // Nhập sản phẩm qua file excel
+    @Operation(summary = "Nhập sản phẩm qua file excel")
     @PostMapping("{storeId}/upload")
     public ResponseEntity<String> uploadProducts(@PathVariable Integer storeId,
                                                  @RequestParam("file") MultipartFile file) {
@@ -174,6 +176,7 @@ public class ProductController {
     }
 
     // xuất danh sách sản phẩm qua excel
+    @Operation(summary = "Xuất danh sách sản phẩm qua excel")
     @GetMapping("{storeId}/download")
     public ResponseEntity<byte[]> downloadProducts(@PathVariable Integer storeId) throws IOException {
         List<ProductPublic> productList = productRepository.findAllByStoreId(storeId);
@@ -200,6 +203,7 @@ public class ProductController {
 
     // 2. Lấy thông tin về sản phẩm
     // 2.1 Thông tin tất cả sản phẩm theo cửa hàng
+    @Operation(summary = "Lấy thông tin tất cả sản phẩm theo cửa hàng")
     @GetMapping("/store/{storeId}")
     public ResponseEntity<?> getAllProductFromStore(@PathVariable Integer storeId) {
         List<ProductPublic> productPublics = productService.getAllProductPublicFromStore(storeId);
@@ -207,6 +211,7 @@ public class ProductController {
     }
 
     //2.2 Thông tin sản phẩm theo Id
+    @Operation(summary = "Lấy thông tin tất cả sản phẩm theo id")
     @GetMapping("/productDetail/{id}")
     public ResponseEntity<?> getProductDetailById(@PathVariable Long id) {
         ProductPublic productPublic = productService.getProductDetailById(id);
@@ -214,6 +219,7 @@ public class ProductController {
     }
 
     //2.3 Thông tin sản phẩm theo nhóm hàng
+    @Operation(summary = "Lấy thông tin tất cả sản phẩm theo nhóm hàng")
     @GetMapping("/productDetail/{storeId}/groupProduct")
     public ResponseEntity<?> getProductDetailByGroupProduct(@PathVariable Integer storeId, @RequestParam Integer groupId) {
         List<ProductPublic> productPublics = productService.getProductDetailByGroupProduct(storeId, groupId);
@@ -221,6 +227,7 @@ public class ProductController {
     }
 
     // 2.4 Tìm kiếm sản phẩm
+    @Operation(summary = "Tìm kiếm sản phẩm theo tên")
     @GetMapping("/{storeId}/suggest")
     public ResponseEntity<?> getSuggestProduct(@RequestParam String name, @PathVariable Integer storeId) {
         List<ProductPublic> productPublics = productService.getSuggestProduct(name, storeId);
@@ -229,6 +236,7 @@ public class ProductController {
 
 
     // 3. Cập nhật sản phẩm
+    @Operation(summary = "Cập nhật sản phẩm")
     @PatchMapping ("/update/{productId}")
     public ResponseEntity<?> updateProduct(@PathVariable Long productId,
                                            @RequestBody UpsertProductRequest upsertProductRequest) {
@@ -246,6 +254,7 @@ public class ProductController {
 
 
     // 4. Xoá sản phẩm
+    @Operation(summary = "Xoá sản phẩm")
     @DeleteMapping("/delete/{productId}")
     public ResponseEntity<?> deleteProduct(@PathVariable Long productId) {
         productService.deleteProduct(productId);

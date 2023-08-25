@@ -7,6 +7,7 @@ import com.example.storemanagement.exception.BadRequestException;
 import com.example.storemanagement.service.ProductService;
 import com.example.storemanagement.service.VoucherService;
 import com.example.storemanagement.service.WebService;
+import io.swagger.v3.oas.annotations.Operation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -88,13 +89,13 @@ public class VoucherController {
             throw new BadRequestException("Bạn không có quyền truy cập nội dung này");
         }
     }
-
+    @Operation(summary = "Tạo voucher mới")
     @PostMapping("/{storeId}/create")
     public ResponseEntity<?> createVoucher(@PathVariable Integer storeId, @RequestBody UpsertVoucherRequest upsertVoucherRequest) {
         VoucherPublic voucherPublic = voucherService.createVoucher(storeId, upsertVoucherRequest);
         return ResponseEntity.ok(voucherPublic);
     }
-
+    @Operation(summary = "Cập nhật voucher")
     @PutMapping("/{storeId}/update")
     public ResponseEntity<?> updateVoucher(@PathVariable Integer storeId, @RequestBody UpsertVoucherRequest upsertVoucherRequest) {
         VoucherPublic voucherPublic = voucherService.updateVoucher(storeId, upsertVoucherRequest);
@@ -103,6 +104,7 @@ public class VoucherController {
 
 
     // Kiểm tra voucher được nhập vào
+    @Operation(summary = "Kiểm tra voucher được nhập vào")
     @GetMapping("/{storeId}/check-expired")
     public ResponseEntity<?> checkVoucherExpired(@PathVariable Integer storeId, @RequestParam String code) {
         VoucherPublic voucherPublic = voucherService.checkVoucherExpired(storeId, code);
@@ -110,6 +112,7 @@ public class VoucherController {
     }
 
     // Kích hoạt/huỷ kích hoạt voucher
+    @Operation(summary = "Kích hoạt/huỷ kích hoạt voucher")
     @PutMapping("/{storeId}/change-status")
     public ResponseEntity<?> changeStatusVoucher(@PathVariable Integer storeId,
                                                  @RequestParam Integer voucherId,

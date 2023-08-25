@@ -5,6 +5,7 @@ import com.example.storemanagement.dto.request.UpsertSupplierRequest;
 import com.example.storemanagement.exception.BadRequestException;
 import com.example.storemanagement.service.SupplierService;
 import com.example.storemanagement.service.WebService;
+import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -41,7 +42,7 @@ public class SupplierController {
             throw new BadRequestException("Bạn không có quyền truy cập nội dung này");
         }
     }
-
+    @Operation(summary = "Thêm nhà cung cấp")
     @PostMapping("/{storeId}/create")
     public ResponseEntity<?> addSupplier(@PathVariable Integer storeId, @Valid @RequestBody UpsertSupplierRequest upsertSupplierRequest) {
         SupplierPublic supplierPublic = supplierService.addSupplier(storeId, upsertSupplierRequest);

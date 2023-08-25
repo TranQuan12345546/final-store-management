@@ -11,6 +11,7 @@ import com.example.storemanagement.repository.StoreRepository;
 import com.example.storemanagement.repository.TokenConfirmRepository;
 import com.example.storemanagement.repository.UserRepository;
 import com.example.storemanagement.service.MailService;
+import io.swagger.v3.oas.annotations.Operation;
 import jakarta.mail.MessagingException;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;

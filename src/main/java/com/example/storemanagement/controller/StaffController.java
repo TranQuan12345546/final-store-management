@@ -13,6 +13,7 @@ import com.example.storemanagement.exception.NotFoundException;
 import com.example.storemanagement.repository.TokenConfirmRepository;
 import com.example.storemanagement.repository.UserRepository;
 import com.example.storemanagement.service.*;
+import io.swagger.v3.oas.annotations.Operation;
 import jakarta.mail.MessagingException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -166,6 +167,7 @@ public class StaffController {
     }
 
     // Upload avatar nhân viên
+    @Operation(summary = "Thay đổi avatar nhân viên")
     @PostMapping("/avatar/{staffId}")
     public ResponseEntity<?> uploadStaffAvatar(@PathVariable Integer staffId,
                                                @RequestParam("file") MultipartFile file) {
@@ -174,12 +176,13 @@ public class StaffController {
     }
 
     // Update thông tin nhân viên
+    @Operation(summary = "Cập nhật thông tin nhân viên")
     @PutMapping("/update")
     public ResponseEntity<?> updateStaffInfo(@RequestBody UpsertStaffRequest upsertStaffRequest) {
         StaffPublic staffPublic = staffService.updateStaffInfo(upsertStaffRequest);
         return ResponseEntity.ok(staffPublic);
     }
-
+    @Operation(summary = "Xoá nhân viên")
     @DeleteMapping("/delete/{staffId}")
     public ResponseEntity<?> deleteStaff(@PathVariable Integer staffId) {
         staffService.deleteStaff(staffId);
@@ -187,6 +190,7 @@ public class StaffController {
     }
 
     // Check-in ca làm việc
+    @Operation(summary = "Gửi yêu cầu check in ca làm việc")
     @PostMapping("/check-in/{userId}")
     public ResponseEntity<?> checkInShift(@PathVariable Integer userId) throws MessagingException {
         User user = userRepository.findById(userId)
@@ -210,6 +214,7 @@ public class StaffController {
         return ResponseEntity.ok("Gửi email thành công");
     }
 
+    @Operation(summary = "Kiểm tra tính hợp lệ token xác nhận")
     @GetMapping("/check-in-confirm/{token}")
     public ResponseEntity<?> checkToken(@PathVariable String token) {
         // Kiểm tra token có hợp lệ hay không

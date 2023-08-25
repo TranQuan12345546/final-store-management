@@ -212,12 +212,12 @@
         </a>
         <div class="collapse" id="products">
           <ul class="nav flex-column sub-menu">
-            <li class="nav-item"> <a class="nav-link" th:href="@{/products/{storeId}/inventory (storeId = ${storeId})}">Quản lý tồn kho</a></li>
-            <li class="nav-item"> <a class="nav-link" th:href="@{/products/{storeId}/stock-card (storeId = ${storeId})}">Thẻ kho</a></li>
-            <li class="nav-item"> <a class="nav-link" th:href="@{/order/{storeId}/order-history (storeId = ${storeId})}">Lịch sử bán hàng</a></li>
-            <li class="nav-item"> <a class="nav-link" th:href="@{/order/{storeId}/return (storeId = ${storeId})}">Trả hàng</a></li>
-            <li class="nav-item"> <a class="nav-link" th:href="@{/inventory/{storeId}/check-stock (storeId = ${storeId})}">Kiểm hàng</a></li>
-            <li class="nav-item"> <a class="nav-link" th:href="@{/inventory/{storeId}/check-stock/history (storeId = ${storeId})}">Lịch sử kiểm hàng</a></li>
+            <li sec:authorize="hasRole('OWNER')" class="nav-item"> <a class="nav-link" th:href="@{/products/{storeId}/inventory (storeId = ${storeId})}">Quản lý tồn kho</a></li>
+            <li sec:authorize="hasAnyRole('OWNER', 'STAFF')" class="nav-item"> <a class="nav-link" th:href="@{/products/{storeId}/stock-card (storeId = ${storeId})}">Thẻ kho</a></li>
+            <li sec:authorize="hasAnyRole('OWNER', 'STAFF')" class="nav-item"> <a class="nav-link" th:href="@{/order/{storeId}/order-history (storeId = ${storeId})}">Lịch sử bán hàng</a></li>
+            <li sec:authorize="hasAnyRole('OWNER', 'STAFF')" class="nav-item"> <a class="nav-link" th:href="@{/order/{storeId}/return (storeId = ${storeId})}">Trả hàng</a></li>
+            <li sec:authorize="hasRole('OWNER')" class="nav-item"> <a class="nav-link" th:href="@{/inventory/{storeId}/check-stock (storeId = ${storeId})}">Kiểm hàng</a></li>
+            <li sec:authorize="hasRole('OWNER')" class="nav-item"> <a class="nav-link" th:href="@{/inventory/{storeId}/check-stock/history (storeId = ${storeId})}">Lịch sử kiểm hàng</a></li>
           </ul>
         </div>
       </li>
@@ -229,10 +229,10 @@
         </a>
         <div class="collapse" id="staff">
           <ul class="nav flex-column sub-menu">
-            <li class="nav-item"> <a class="nav-link" th:href="@{/staff/{storeId} (storeId = ${storeId})}">Xem thông tin</a></li>
-            <li class="nav-item"> <a class="nav-link" th:href="@{/staff/{storeId}/timetable (storeId = ${storeId})}">Lịch làm việc</a></li>
-            <li class="nav-item"> <a class="nav-link" th:href="@{/staff/{storeId}/timekeeping (storeId = ${storeId})}">Chấm công</a></li>
-            <li class="nav-item"> <a class="nav-link" th:href="@{/staff/{storeId}/salary (storeId = ${storeId})}">Tính lương</a></li>
+            <li sec:authorize="hasRole('OWNER')" class="nav-item"> <a class="nav-link" th:href="@{/staff/{storeId} (storeId = ${storeId})}">Xem thông tin</a></li>
+            <li sec:authorize="hasRole('OWNER')" class="nav-item"> <a class="nav-link" th:href="@{/staff/{storeId}/timetable (storeId = ${storeId})}">Lịch làm việc</a></li>
+            <li sec:authorize="hasAnyRole('OWNER', 'STAFF')" class="nav-item"> <a class="nav-link" th:href="@{/staff/{storeId}/timekeeping (storeId = ${storeId})}">Chấm công</a></li>
+            <li sec:authorize="hasRole('OWNER')" class="nav-item"> <a class="nav-link" th:href="@{/staff/{storeId}/salary (storeId = ${storeId})}">Tính lương</a></li>
           </ul>
         </div>
       </li>
@@ -258,7 +258,7 @@
         </a>
         <div class="collapse" id="campaign">
           <ul class="nav flex-column sub-menu">
-            <li class="nav-item"> <a class="nav-link" th:href="@{/campaign/{storeId}/create-page (storeId = ${storeId})}">Tạo mới chiến dịch</a></li>
+            <li sec:authorize="hasRole('OWNER')" class="nav-item"> <a class="nav-link" th:href="@{/campaign/{storeId}/create-page (storeId = ${storeId})}">Tạo mới chiến dịch</a></li>
             <li class="nav-item"> <a class="nav-link" th:href="@{/campaign/{storeId}/all-campaign (storeId = ${storeId})}">Tất cả chiến dịch</a></li>
             <li class="nav-item"> <a class="nav-link" th:href="@{/campaign/{storeId}/active (storeId = ${storeId})}">Đang chạy</a></li>
             <li class="nav-item"> <a class="nav-link" th:href="@{/campaign/{storeId}/expired (storeId = ${storeId})}">Đã hoàn thành</a></li>
@@ -273,27 +273,27 @@
           </a>
           <div class="collapse" id="voucher">
             <ul class="nav flex-column sub-menu">
-              <li class="nav-item"> <a class="nav-link" th:href="@{/voucher/{storeId}/create-page (storeId = ${storeId})}">Tạo mã voucher</a></li>
+              <li sec:authorize="hasRole('OWNER')" class="nav-item"> <a class="nav-link" th:href="@{/voucher/{storeId}/create-page (storeId = ${storeId})}">Tạo mã voucher</a></li>
               <li class="nav-item"> <a class="nav-link" th:href="@{/voucher/{storeId}/all-voucher (storeId = ${storeId})}">Tất cả voucher</a></li>
               <li class="nav-item"> <a class="nav-link" th:href="@{/voucher/{storeId}/active (storeId = ${storeId})}">Đang hoạt động</a></li>
               <li class="nav-item"> <a class="nav-link" th:href="@{/voucher/{storeId}/expired (storeId = ${storeId})}">Đã hết hạn</a></li>
             </ul>
           </div>
         </li>
-      <li class="nav-item nav-category">Báo cáo</li>z
-      <li class="nav-item main-category">
+      <li sec:authorize="hasRole('OWNER')" class="nav-item nav-category">Báo cáo</li>z
+      <li sec:authorize="hasRole('OWNER')" class="nav-item main-category">
         <a class="nav-link" data-bs-toggle="collapse" href="#auth" aria-expanded="false" aria-controls="auth">
           <i class="menu-icon mdi mdi mdi-animation"></i>
           <span class="menu-title ">Báo cáo cuối ngày</span>
         </a>
       </li>
-      <li class="nav-item main-category">
+      <li sec:authorize="hasRole('OWNER')" class="nav-item main-category">
         <a class="nav-link" data-bs-toggle="collapse" href="#auth" aria-expanded="false" aria-controls="auth">
           <i class="menu-icon mdi mdi mdi-arrange-send-backward"></i>
           <span class="menu-title">Báo cáo cuối tuần</span>
         </a>
       </li>
-      <li class="nav-item main-category">
+      <li sec:authorize="hasRole('OWNER')" class="nav-item main-category">
         <a class="nav-link" data-bs-toggle="collapse" href="#auth" aria-expanded="false" aria-controls="auth">
           <i class="menu-icon mdi mdi mdi-arrange-send-to-back"></i>
           <span class="menu-title">Báo cáo cuối tháng</span>

@@ -66,7 +66,9 @@ public class SecurityConfig {
                 "/send-resister-code/**",
                 "/resister/{token}",
                 "/register",
-                "/img/**"
+                "/img/**",
+                "/swagger-ui.html",
+                "/v3/api-docs/**"
         };
         http
                 .csrf(c -> c.disable())

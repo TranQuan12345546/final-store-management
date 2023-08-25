@@ -7,6 +7,7 @@ import com.example.storemanagement.exception.BadRequestException;
 import com.example.storemanagement.service.CampaignService;
 import com.example.storemanagement.service.ProductService;
 import com.example.storemanagement.service.WebService;
+import io.swagger.v3.oas.annotations.Operation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -87,19 +88,20 @@ public class CampaignController {
             throw new BadRequestException("Bạn không có quyền truy cập nội dung này");
         }
     }
-
+    @Operation(summary = "Tạo chiến dịch khuyến mãi")
     @PostMapping("/{storeId}/create")
     public ResponseEntity<?> createCampaign(@PathVariable Integer storeId, @RequestBody UpsertCampaignRequest upsertCampaignRequest) {
         CampaignPublic campaignPublic = campaignService.createCampaign(storeId, upsertCampaignRequest);
         return ResponseEntity.ok(campaignPublic);
     }
-
+    @Operation(summary = "Cập nhật chiến dịch khuyến mãi")
     @PostMapping("/{storeId}/update")
     public ResponseEntity<?> updateCampaign(@PathVariable Integer storeId, @RequestBody UpsertCampaignRequest upsertCampaignRequest) {
         CampaignPublic campaignPublic = campaignService.updateCampaign(storeId, upsertCampaignRequest);
         return ResponseEntity.ok(campaignPublic);
     }
 
+    @Operation(summary = "Chuyển đổi trạng thái chiến dịch")
     @PutMapping("/{storeId}/change-status")
     public ResponseEntity<?> changeStatusCampaign(@PathVariable Integer storeId,
                                                  @RequestParam Integer campaignId,

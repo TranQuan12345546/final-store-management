@@ -27,7 +27,7 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
 
     List<ProductPublic> findAllByStoreIdAndGroupProductId(Integer storeId, Integer groupId);
 
-    @Query(value = "SELECT SUM(p.quantity) FROM Product p WHERE p.store_id = :storeId", nativeQuery = true)
+    @Query(value = "SELECT SUM(p.quantity) FROM product p WHERE p.store_id = :storeId", nativeQuery = true)
     Integer countAvailableProductsByStoreId(@Param("storeId") Integer storeId);
 
     @Query(value = "SELECT SUM(p.initial_price * p.quantity) FROM product p WHERE p.store_id = :storeId", nativeQuery = true)
