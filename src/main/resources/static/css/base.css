@@ -1,0 +1,170 @@
+/* Modal login css */
+
+/* Code animation */
+@keyframes fadeIn {
+    from {
+        top: -100%;
+        opacity: 0;
+    }
+    to {
+        top: 0;
+        opacity: 1;
+    }
+}
+
+@keyframes fadeOut {
+    from {
+        top: 0;
+        opacity: 1;
+    }
+    to {
+        top: -100%;
+        opacity: 0;
+    }
+}
+/* Áp dụng animation vào phần tử */
+
+.modal {
+    display: none;
+    position: fixed;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    overflow-y: auto;
+    animation: fadeIn ease 0.4s;
+}
+
+.modal.active {
+    display: flex;
+}
+
+.modal.fadeOut {
+    animation: fadeOut ease 0.4s;
+}
+
+.modal__overlay {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background: url("/images/register.jpg") center center no-repeat;
+    background-size: cover;
+}
+
+.modal__body {
+    display: flex;
+    flex-direction: column;
+    z-index: 1;
+    margin: auto;
+}
+
+.modal_header {
+    text-align: center;
+    font-size: 30px;
+    margin-bottom: 20px;
+}
+
+.modal .container-fluid {
+    display: flex;
+    flex-direction: column;
+    padding: 30px 0 0 0;
+}
+
+.modal .auto-form-wrapper {
+    background-color: #fff;
+    box-shadow: 0 -25px 37.7px 11.3px rgba(8, 143, 220, 0.07);
+    border-radius: 10px;
+}
+
+.modal .form-control {
+    margin-bottom: 15px;
+}
+
+.modal .row {
+    margin-left: -5px;
+    margin-right: -22px;
+}
+
+.modal .row button {
+    margin: 0;
+    width: 100%;
+    font-size: 13px;
+    font-weight: 400;
+    line-height: 1.2;
+}
+
+.modal .col-lg-1 {
+    width: 10.33333333%;
+}
+
+.modal .col-lg-3 {
+    width: 28%;
+}
+
+.modal .custom-padding {
+    padding: 0 5px;
+}
+
+.modal .sub-form-group {
+    width: 47%;
+    padding: 0 6px;
+}
+
+.modal .sub-form-group:nth-child(2) {
+    width: 49.8%;
+}
+
+.modal .sub-form-group {
+    position: relative;
+}
+
+.modal .sub-icon {
+    position: absolute;
+    pointer-events: none;
+}
+
+select.form-control {
+    padding: 6px 6px;
+}
+
+.form-group.row .icon:nth-child(1) .sub-icon {
+    top: 8px;
+    right: 10px;
+}
+
+.sub-form-group .sub-icon {
+    z-index: 1;
+    top: 8px;
+    right: 11px;
+}
+
+.modal .col-lg-5 {
+    width: 48.3%;
+}
+
+.modal .form-check {
+    margin-bottom: 10px;
+}
+
+.modal .close-btn {
+    display: flex;
+    position: relative;
+    right: 290px;
+    bottom: -24px;
+    width: 30px;
+    height: 30px;
+    align-items: center;
+    justify-content: center;
+    z-index: 3;
+    cursor: pointer;
+}
+
+.modal .bx-x {
+    font-size: 50px;
+    color: #c8cbcf;
+}
+
+.error {
+    margin-top: 5px;
+    color: red;
+    font-style: italic;
+}

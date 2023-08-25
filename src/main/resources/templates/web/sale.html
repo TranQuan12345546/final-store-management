@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="https://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>Bán hàng - ShopMefy</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,300;1,400;1,500;1,700;1,900&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" th:href="@{/vendors/ti-icons/css/themify-icons.css}">
+
+    <link rel="stylesheet" th:href="@{/css/sales.css}">
+    <link rel="stylesheet" th:href="@{/css/common.css}">
+    <!-- endinject -->
+    <link rel="shortcut icon" th:href="@{/images/logo.png}" />
+    <!--    CSS-->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css"
+          integrity="sha512-vKMx8UnXk60zUwyUnUPM3HbQo8QfmNx7+ltw8Pm5zLusl1XIfwcxo8DbWCqMGKaWeNxWA8yrx5v3SaVpMvR3CA=="
+          crossorigin="anonymous" referrerpolicy="no-referrer"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+</head>
+<body>
+<div class="header">
+    <button class="toggle-button"  onclick="toggleLeftPanel()">
+        <i class="ti ti-menu"></i>
+    </button>
+    <div class="search">
+        <div class="search-product">
+            <i class="ti ti-search "></i>
+        </div>
+        <input id="searchInput" type="search" class="form-control" placeholder="Nhập tên hàng hoặc mã hàng" title="Tìm kiếm theo tên hàng">
+        <div class="search-results-container">
+            <ul id="searchResults" class="list-group">
+                <li class="product-item">
+                        <img class="thumbnail img" src="https://picsum.photos/200?random=1">
+                        <div>
+                           <h4 class="">product.name</h4>
+                           <p class="">Giá bán: product.salePrice</p>
+                        </div>
+                        <div>
+                            <p class="">product.codeNumber</p>
+                            <p class="">Tồn kho: product.quantity</p>
+                        </div>
+                    </li>
+            </ul>
+        </div>
+    </div>
+
+    <div id="avatar-container" th:data-user-id="${userInfo.id}">
+        <img class="avatar-thumbnail" th:src="@{${userInfo.avatar != null ? 'http://localhost:8080/' + userInfo.avatar.id :'http://localhost:8080/images/default-avatar.jpg'}}">
+    </div>
+</div>
+<div class="container">
+    <div class="margin-left">
+        <div class="left-panel">
+            <div class="order-list">
+            </div>
+            <div class="left-panel-footer">
+                <div class="note">
+                    <ti class="ti ti-pencil-alt"></ti>
+                    <input type="text" placeholder="Ghi chú đơn hàng">
+                </div>
+                <span>Tổng SL : 0</span>
+                <span>Tổng đơn hàng: 0 VNĐ</span>
+            </div>
+        </div>
+    </div>
+    <div class="margin-right">
+        <div class="right-panel">
+            <div class="product-list" >
+                <th:block th:each="product : ${productList}">
+                    <button class="product-container" th:data-group-product-id="${product.groupProduct.id}" th:data-product-id="${product.id}" th:data-product-code-number="${product.codeNumber}">
+                        <img class="img" th:src="${product.images.size() != 0 ? 'http://localhost:8080/' + product.images[0].id : 'http://localhost:8080/images/image-default.jpg'}" alt="">
+                        <div class="content">
+                            <span th:if="${product.promotionalPrice != 0 && product.isOnPromotional == true}" th:text="${#numbers.formatDecimal(product.promotionalPrice, 0, 'COMMA', 0, 'POINT')} + 'đ'" style="color: #007bff"></span>
+                            <span th:if="${product.promotionalPrice != 0 && product.isOnPromotional == true}" th:text="${#numbers.formatDecimal(product.salePrice, 0, 'COMMA', 0, 'POINT')} + 'đ'" style="color: red; text-decoration: line-through;"></span>
+                            <span th:if="${product.promotionalPrice == 0 || product.isOnPromotional == false}" th:text="${#numbers.formatDecimal(product.salePrice, 0, 'COMMA', 0, 'POINT')} + 'đ'" style="color: #007bff"></span>
+                            <div class="quantity" th:text="'SL: ' + ${product.quantity} "></div>
+                            <p th:text="${product.name}"></p>
+                        </div>
+                    </button>
+                </th:block>
+            </div>
+            <div class="right-panel-footer">
+                <div class="customer">
+                    <div class="search-client">
+                        <div class="search search-customer">
+                            <div class="search-product">
+                                <i class="ti ti-search "></i>
+                            </div>
+                            <input id="searchInput2" type="search" class="form-control" placeholder="Nhập tên khách hàng" title="Tìm khách hàng">
+                            <div class="search-results-container-2">
+                                <ul id="searchResults2">
+
+                                </ul>
+                            </div>
+                        </div>
+                        <i id="add-client" class="fa-solid fa-plus"></i>
+                    </div>
+                    <div class="choose-client">
+                        <span></span>
+                        <button id="remove-client"><i class="fa-solid fa-xmark"></i></button>
+                    </div>
+                </div>
+                <div class="dropdown">
+                    <button class="dropdown-btn" onclick="toggleDropdown()">Chọn nhóm hàng</button>
+                    <div class="dropdown-menu" id="dropdownMenu">
+                        <ul>
+                            <li>Chọn tất cả</li>
+                            <li th:each="groupProduct : ${groupProductList}" th:text="${groupProduct.name}" th:data-group-product-id="${groupProduct.id}"></li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="pagination">
+                    <button id="prevBtn"><i class="ti ti-angle-left"></i></button>
+                    <button id="nextBtn"><i class="ti ti-angle-right"></i></button>
+                </div>
+                <div class="button-pay">
+                    <button id="pay">Thanh toán</button>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<footer class="">
+    <span class="copy-right">Copyright © 2023. All rights reserved.</span>
+</footer>
+
+<!-- Modal detail-->
+<div id="productModal" class="modal">
+    <!-- Modal content -->
+    <div class="modal-container">
+        <div class="modal-header">
+            <h2>Product Name</h2>
+            <span class="close">&times;</span>
+        </div>
+        <!-- Product details here -->
+        <div class="modal-content">
+            <div class="display-area">
+                <div class="cards-wrapper">
+                    <div class="card"><img src="https://picsum.photos/200?random=1" alt=""></div>
+                    <div class="card"><img src="https://picsum.photos/200?random=2" alt=""></div>
+                    <div class="card"><img src="https://picsum.photos/200?random=3" alt=""></div>
+                    <div class="card"><img src="https://picsum.photos/200?random=4" alt=""></div>
+                    <div class="card"><img src="https://picsum.photos/200?random=5" alt=""></div>
+                </div>
+            </div>
+            <div class="dots-wrapper">
+                <button class="dot active"></button>
+                <button class="dot"></button>
+                <button class="dot"></button>
+                <button class="dot"></button>
+            </div>
+            <div class="detail">
+                <p>Giá bán: 100,000</p>
+                <div style="text-align: center">
+                    <span>Số lượng: </span>
+                    <span>50</span>
+                    <p class="group-product">Nhóm hàng: </p>
+                </div>
+                <p class="description">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer nec metus ac lorem malesuada euismod.</p>
+                <p class="note">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ad consectetur cupiditate dicta eligendi et, excepturi illum incidunt ipsam iure laborum nobis porro provident qui quo repellat sunt tempora temporibus ut.</p>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button class="btn-success">Xong</button>
+        </div>
+    </div>
+</div>
+
+<div id="payModal" class="modal">
+    <!-- Modal content -->
+    <div class="modal-container">
+        <div class="modal-header">
+            <h2>Chi tiết thanh toán</h2>
+            <span class="close">&times;</span>
+        </div>
+
+        <div class="modal-content" >
+            <div style="display: flex; flex-direction: column">
+                <span>Mã voucher (nếu có)</span>
+                <input type="text" name="" id="input-code">
+                <span id="voucher-active" style="color: green; display: none; margin-bottom: 10px"></span>
+                <span id="voucher-invalid" style="color: red; display: none; margin-bottom: 10px"></span>
+            </div>
+            <div class="table-container custom-scrollbar" >
+                <table>
+                    <thead>
+                    <tr>
+                        <th>
+                            STT
+                        </th>
+                        <th>
+                            Tên sản phẩm
+                        </th>
+                        <th>
+                            Số lượng
+                        </th>
+                        <th>Giảm giá trực tiếp</th>
+                        <th>Giảm giá voucher</th>
+                        <th>
+                            Thành tiền
+                        </th>
+
+                    </tr>
+                    </thead>
+                    <tbody id="table-result">
+
+                    </tbody>
+                    <tfoot>
+                    <th colspan="2">Tổng giá trị đơn hàng:</th>
+                    <th id="totalQuantity">0</th>
+                    <th id="discount-price">0</th>
+                    <th id="discount-voucher">0</th>
+                    <th id="totalAmount">0</th>
+                    </tfoot>
+                </table>
+            </div>
+
+        </div>
+        <div class="modal-footer">
+            <button id="btn-pay" class="btn-success">THANH TOÁN</button>
+        </div>
+    </div>
+</div>
+
+
+<!--Modal new client-->
+<div class="modal-client" id="addClientModal">
+    <div class="modal-overlay"></div>
+    <div class="modal-client-container">
+        <div class="modal-client-header">
+            <h3 class="modal-title" id="addProductModalLabel">Thêm khách hàng mới</h3>
+            <button type="button" class="btn-close"><i class="fa-solid fa-circle-xmark" style="font-size: 18px;"></i></button>
+        </div>
+        <div class="modal-client-body">
+            <form id="submitForm">
+                <div class="flex-column  mb-3">
+                    <label class="small mb-1" for="inputFullName">Họ và tên</label>
+                    <input class="form-control" id="inputFullName" type="text" placeholder="Nhập họ và tên">
+                </div>
+                <div class="flex-column mb-3">
+                    <label class="small mb-1" for="inputLocation">Địa chỉ</label>
+                    <input class="form-control" id="inputLocation" type="text" placeholder="Nhập địa chỉ">
+                </div>
+                <div class="flex-column mb-3">
+                    <label class="small mb-1" for="inputEmailAddress">Email</label>
+                    <input class="form-control" id="inputEmailAddress" type="email" placeholder="Nhập email">
+                </div>
+                <div class="flex-row mb-3">
+                    <div class="flex-column">
+                        <label class="" for="inputPhone">Số điện thoại</label>
+                        <input class="" id="inputPhone" type="tel" placeholder="Nhập số điện thoại">
+                    </div>
+                    <div class="flex-column">
+                        <label class="" for="inputBirthday">Ngày sinh</label>
+                        <input class="" id="inputBirthday" type="text" name="birthday" placeholder="xx/xx/xxxx">
+                    </div>
+                </div>
+                <button id="add-staff-btn" class="" type="submit">Xác nhận</button>
+            </form>
+        </div>
+
+    </div>
+</div>
+
+<th:block class="javascript">
+<script
+        src="https://code.jquery.com/jquery-3.7.0.min.js"
+        integrity="sha256-2Pmvv0kuTBOenSvLm6bvfBSSHrUJ+3A7x6P5Ebd07/g="
+        crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"
+        integrity="sha512-VEd+nq25CkR676O+pLBnDW09R7VQX9Mdiij052gVCp5yVH3jGtH70Ho/UUv4mJDsEdTvqRCFZg0NKGiojGnUCw=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script th:inline="javascript">
+    const productList = /*[[${productList}]]*/ [];
+
+    const campaignList = /*[[${campaignList}]]*/ [];
+</script>
+<script th:src="@{/js/sale/sale.js}"></script>
+</th:block>
+</body>
+</html>

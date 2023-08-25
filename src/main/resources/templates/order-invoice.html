@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="https://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>Hóa đơn bán hàng</title>
+    <style>
+        html {
+            font-family: Roboto, "Helvetica Neue", Helvetica, Arial, sans-serif;
+        }
+
+        header {
+            text-align: center;
+        }
+
+        table {
+            border-collapse: collapse;
+            width: 100%;
+        }
+        th, td {
+            text-align: center;
+            border: 1px solid black;
+            padding: 8px;
+        }
+
+        footer {
+            margin-top: 20px;
+            margin-right: 50px;
+            font-weight: bold;
+            float: right;
+        }
+
+        footer div {
+            margin-top: 8px;
+        }
+
+    </style>
+</head>
+<body>
+<header>
+    <h4><span th:text="${tenCuaHang}">Trần Thị Mùi</span></h4>
+    <p>Địa chỉ: <span th:text="${diaChi}">284 Trần Thành Ngọ - Quận Kiến An, Hải Phòng</span></p>
+    <p>Điện thoại: <span th:text="${soDienThoai}">0933402190</span></p>
+    <h2>HÓA ĐƠN BÁN HÀNG</h2>
+    <p th:text="'Số HĐ: ' + ${orderList[0].orderNumber}">Số HĐ: HD003362</p>
+    <p>
+        Ngày <span th:text="${#temporals.format(orderList[0].orderDate, 'dd')}">08</span>
+        tháng <span th:text="${#temporals.format(orderList[0].orderDate, 'MM')}">05</span>
+        năm <span th:text="${#temporals.format(orderList[0].orderDate, 'yyyy')}">2014</span>
+    </p>
+</header>
+<div class="content">
+    <table >
+        <thead>
+            <tr>
+                <th>TT</th>
+                <th>Sản phẩm</th>
+                <th>Đơn giá</th>
+                <th>SL</th>
+                <th>Giảm giá</th>
+                <th>Thành tiền</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr th:each="order : ${orderList}">
+                <td th:text="${orderStat.index + 1}">1</td>
+                <td th:text="${order.productName}">Váy nữ Alcado (chiếc)</td>
+                <td th:text="${#numbers.formatDecimal(order.totalPrice + order.discount, 0, 'COMMA', 0, 'POINT')}">10,000 - 12,500</td>
+                <td th:text="${#numbers.formatDecimal(order.quantity, 0, 'COMMA', 0, 'POINT')}">5</td>
+                <td th:text="${#numbers.formatDecimal(order.discount, 0, 'COMMA', 0, 'POINT')}"></td>
+                <td th:text="${#numbers.formatDecimal(order.totalPrice, 0, 'COMMA', 0, 'POINT')}">50,000</td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+<footer>
+    <div>
+        <span >Tổng tiền hàng:</span>
+        <span th:text="${#numbers.formatDecimal(orderPrice, 0, 'COMMA', 0, 'POINT') + ' VND'}">170,000</span>
+    </div>
+    <div>
+        <span>Giảm giá : </span>
+        <span th:text="${#numbers.formatDecimal(orderDiscount, 0, 'COMMA', 0, 'POINT') + ' VND'}">10,000</span>
+    </div>
+    <div>
+        <span>Tổng thanh toán:</span>
+        <span th:text="${#numbers.formatDecimal(orderTotal, 0, 'COMMA', 0, 'POINT') + ' VND'}">160,000</span>
+    </div>
+</footer>
+
+</body>
+</html>

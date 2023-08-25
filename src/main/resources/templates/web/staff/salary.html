@@ -1,0 +1,100 @@
+<!DOCTYPE html >
+<html lang="en" xmlns:th="https://www.thymeleaf.org"
+      th:replace="~{layout/layout.html :: main-fragment(~{:: title}, ~{:: .css}, ~{:: .content-wrapper}, ~{:: .js})}"
+      xmlns="http://www.w3.org/1999/html">
+
+<head>
+    <title>Lịch sử kiểm hàng - ShopMefy</title>
+    <th:block class="css">
+        <link rel="stylesheet" th:href="@{/css/staffs/salary.css}">
+        <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
+        <link rel="stylesheet" th:href="@{/vendors/font-awesome/css/font-awesome.min.css}">
+    </th:block>
+
+</head>
+<body>
+<div class="content-wrapper">
+    <divc class="card">
+        <div class="card-body">
+            <div class="header">
+                <div class="row">
+                    <div class="col-md-3">
+                        <h3 style="display: inline"> Chọn ngày cần truy vấn:</h3>
+                    </div>
+                    <div class="col-md-9">
+                        <div id="report-range" style="background-color: transparent; cursor: pointer; padding: 5px 10px;">
+                            <i class="fa fa-calendar"></i>&nbsp;
+                            <span></span> <i class="fa fa-caret-down"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div>
+                <span>Số tiền lương theo giờ: </span>
+                <input id="hourly-salary" type="text" th:value="${salaryPerHour}" disabled>
+                <button id="change-hourly-salary">Thay đổi</button>
+            </div>
+
+            <div class="my-4 text-center">
+                <h4 class="mb-3">Bảng tính lương</h4>
+            </div>
+
+            <div class="table-container">
+                <div class="">
+                    <table class="table table-bordered text-center">
+                        <thead>
+                        <tr>
+                            <th>Tên nhân viên</th>
+                            <th>Thời gian bắt đầu làm việc</th>
+                            <th>Số ca làm việc trong tháng</th>
+                            <th>Số giờ làm việc trong tháng</th>
+                            <th>Lương tạm tính</th>
+                            <th>Thưởng</th>
+                            <th>Tổng lương</th>
+                        </tr>
+                        </thead>
+                        <tbody id="table-body">
+                        <th:block th:each="staffSalary : ${staffSalaryList}">
+                            <tr>
+                                <td th:text="${staffSalary.staffName}"></td>
+                                <td th:text="${#temporals.format(staffSalary.startWork, 'dd/MM/yyyy')}"></td>
+                                <td th:text="${staffSalary.totalWorkShift}"></td>
+                                <td th:text="${staffSalary.totalWorkTimeByMonth}"></td>
+                                <td th:text="${staffSalary.termSalary}"></td>
+                                <td><input type="text" name="" id=""></td>
+                                <td th:text="${staffSalary.termSalary}"></td>
+                            </tr>
+                        </th:block>
+                        </tbody>
+                    </table>
+                </div>
+
+                <button class="btn btn-primary float-end my-1">Xác nhận</button>
+            </div>
+        </div>
+    </divc>
+
+</div>
+
+
+
+
+
+
+
+
+<!-- content-wrapper ends -->
+<th:block class="js">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
+
+    <script th:src="@{/js/staff/salary.js}"></script>
+    <script th:inline="javascript">
+    </script>
+</th:block>
+
+
+
+</body>
+
+</html>

@@ -1,0 +1,230 @@
+<!DOCTYPE html >
+<html lang="en" xmlns:th="https://www.thymeleaf.org"
+      th:replace="~{layout/layout.html :: main-fragment(~{:: title}, ~{:: .css}, ~{:: .content-wrapper}, ~{:: .js})}"
+      xmlns="http://www.w3.org/1999/html">
+
+<head>
+  <title>Kiểm hàng - ShopMefy</title>
+
+  <th:block class="css">
+    <link rel="stylesheet" th:href="@{/css/products/check-stock.css}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/paginationjs/2.6.0/pagination.min.css"
+          integrity="sha512-K1k7jSn9RDKEcn/ugqVVvWYu0bcS3q1w6m/5pQSnrj0bCfIqF6Wk49lkmckSb4wglvTP9V17LtS0q0XxYccXbg=="
+          crossorigin="anonymous" referrerpolicy="no-referrer"/>
+  </th:block>
+
+</head>
+<body>
+<div class="content-wrapper ">
+
+    <div class="spin-wrapper" style="display: none">
+      <div class="spinner-border" role="status" >
+        <span class="sr-only"></span>
+      </div>
+    </div>
+    <div class="inventory-option" style="display: block">
+      <h3>Tên buổi kiểm kê </h3>
+      <input id="inventory-name" type="text" placeholder="Nhập tên...">
+      <h3>Chọn phương thức kiểm kê</h3>
+      <div class="options">
+        <button class="option-btn btn btn-behance" onclick="showAllItems()">Chọn tất cả</button>
+        <button class="option-btn btn btn-behance" onclick="showByCategory()">Chọn theo ngành hàng</button>
+      </div>
+      <div id="all-product" style="display: none">
+        <span class="">Đã chọn: Tất cả sản phẩm</span>
+        <button class="option-btn btn btn-behance" onclick="startInventory()">Tiến hành kiểm kê</button>
+      </div>
+      <div id="all-category" style="display: none">
+        <span class="">Đã chọn: Theo ngành hàng</span>
+        <div id="checked-category" style="text-align: center">
+          <span class="mb-2" style="display: block"> Xin mời chọn ngành hàng bên dưới</span>
+          <div id="category-container"></div>
+        </div>
+      </div>
+
+    </div>
+    <div id="inventory-table" style="display: none;">
+      <h3 class="d-flex justify-content-center">Bảng kiểm kê</h3>
+      <div class="row group-1">
+        <div class="col-md-4">
+          <button id="dropdown-menu-button" class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            Hiển thị theo nhóm hàng
+          </button>
+          <ul class="dropdown-menu custom-scrollbar">
+            <li class="row py-1">
+              <span class="col-md-10">Chọn tất cả</span>
+            </li>
+            <th:block th:each="groupProduct : ${groupProductList}">
+              <li class="row py-1" >
+                <span class="col-md-9" th:data-group-product-id="${groupProduct.id}" th:text="${groupProduct.name}"></span>
+              </li>
+            </th:block>
+          </ul>
+        </div>
+        <div class="col-md-4"></div>
+
+        <div class="search col-md-4">
+          <div class="search-product">
+            <i class="ti ti-search "></i>
+          </div>
+          <input id="searchInput" type="search" class="form-control" placeholder="Nhập tên hàng hoặc mã hàng" title="Tìm kiếm theo tên hàng">
+        </div>
+      </div>
+      <div id="itemList">
+
+      </div>
+      <div class="d-flex justify-content-center" ><button id="btn-done" class="btn btn-primary">Hoàn thành kiểm kê</button></div>
+    </div>
+
+<!--  Bảng Kết quả kiểm kê-->
+    <div id="table-result" style="display: none">
+      <h3 class="d-flex justify-content-center">Kết quả kiểm kê</h3>
+      <div class="row group-2">
+        <div class="col-md-4">
+          <button id="dropdown-menu-button-2" class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            Hiển thị theo nhóm hàng
+          </button>
+          <ul class="dropdown-menu custom-scrollbar" aria-labelledby="dropdown-menu-button-2">
+            <li class="row py-1">
+              <span class="col-md-10">Chọn tất cả</span>
+            </li>
+            <th:block th:each="groupProduct : ${groupProductList}">
+              <li class="row py-1" >
+                <span class="col-md-9" th:data-group-product-id="${groupProduct.id}" th:text="${groupProduct.name}"></span>
+              </li>
+            </th:block>
+          </ul>
+        </div>
+        <div class="col-md-5 p-0"><button id="update-inventory" class="btn btn-primary float-end" style="display: none">Cập nhật tồn kho</button></div>
+
+        <div class="search col-md-3 p-0">
+          <div class="search-product">
+            <i class="ti ti-search "></i>
+          </div>
+          <input id="searchInput2" type="search" class="form-control" placeholder="Nhập tên hàng hoặc mã hàng" title="Tìm kiếm theo tên hàng">
+        </div>
+      </div>
+
+      <div class="card mt-3">
+        <div class="card-body">
+          <div class="table-container">
+            <div class="table-responsive" style="min-height: 729px">
+              <table class="table table-hover">
+                <thead>
+                <tr>
+                  <th>
+                    <div class="input-group">
+                      <input id="checkAll" class="form-check-input" type="checkbox">
+                    </div>
+                  </th>
+                  <th>
+                    Mã hàng
+                  </th>
+                  <th>
+                    Tên hàng
+                  </th>
+                  <th>
+                    Nhóm hàng
+                  </th>
+                  <th>
+                    Giá vốn
+                  </th>
+                  <th>
+                    SL trước khi kiểm
+                  </th>
+                  <th>
+                    SL sau khi kiểm
+                  </th>
+                </tr>
+                </thead>
+                <tbody>
+                </tbody>
+              </table>
+
+            </div>
+          </div>
+        </div>
+      </div>
+        <div class="d-flex justify-content-center mt-3" id="pagination">
+
+        </div>
+
+
+    </div>
+
+
+  <!-- Modal Xác nhận hoàn thành kiểm kê -->
+  <div id="confirmModal" class="modal fade" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Xác nhận hoàn thành</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true"></span>
+          </button>
+        </div>
+        <div class="modal-body ">
+          <p>Vẫn còn sản phẩm chưa được kiểm tra, bạn vẫn muốn hoàn thành chứ?</p>
+        </div>
+        <div class="modal-footer">
+          <button id="confirmDone" type="button" class="btn btn-danger">Xác nhận</button>
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" aria-label="Close">Hủy</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal Xác nhận thay đổi quantity -->
+  <div id="confirm-update" class="modal fade" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Xác nhận thay đổi</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true"></span>
+          </button>
+        </div>
+        <div class="modal-body ">
+          <p>Thay đổi số lượng sản phẩm theo giá trị đã kiểm kê, sau khi thực hiện hành động này sẽ không thể hoàn tác, bạn vẫn muốn tiếp tục chứ?</p>
+        </div>
+        <div class="modal-footer">
+          <button id="confirm-update-btn" type="button" class="btn btn-danger">Xác nhận</button>
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" aria-label="Close">Hủy</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+
+
+
+
+
+<!-- content-wrapper ends -->
+<th:block class="js">
+  <!-- endinject -->
+  <!-- Plugin js for this page -->
+
+  <!-- endinject -->
+  <!-- Custom js for this page-->
+
+  <script
+          src="https://code.jquery.com/jquery-3.7.0.min.js"
+          integrity="sha256-2Pmvv0kuTBOenSvLm6bvfBSSHrUJ+3A7x6P5Ebd07/g="
+          crossorigin="anonymous"></script>
+
+  <!-- End custom js for this page-->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/paginationjs/2.6.0/pagination.min.js"
+          integrity="sha512-GzbaI5EsNzdEUq6/2XLYpr1y9CUZRIVsUeWTAFgULtQa5jZ3Nug8i0nZKM6jp9NffBCZhymPPQFcF0DK+JkRpw=="
+          crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+  <!-- End custom js for this page-->
+
+  <script th:src="@{/js/check-stock/check-stock.js}"></script>
+</th:block>
+
+</body>
+
+</html>

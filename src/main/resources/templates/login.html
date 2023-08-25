@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="https://www.thymeleaf.org">
+
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>Đăng nhập - ShopMefy</title>
+    <link rel="stylesheet" th:href="@{/vendors/ti-icons/css/themify-icons.css}">
+    <link rel="stylesheet" th:href="@{/css/vertical-layout-light/style.css}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css"
+          integrity="sha512-vKMx8UnXk60zUwyUnUPM3HbQo8QfmNx7+ltw8Pm5zLusl1XIfwcxo8DbWCqMGKaWeNxWA8yrx5v3SaVpMvR3CA=="
+          crossorigin="anonymous" referrerpolicy="no-referrer"/>
+    <!-- endinject -->
+    <link rel="shortcut icon" th:href="@{/images/logo.png}" />
+</head>
+
+<body>
+<div class="container-scroller">
+    <div class="container-fluid page-body-wrapper full-page-wrapper">
+        <div class="content-wrapper d-flex align-items-center auth px-0">
+            <div class="row w-100 mx-0">
+                <div class="col-lg-4 mx-auto">
+                    <div class="auth-form-light text-left py-5 px-4 px-sm-5">
+                        <div class="brand-logo mb-1">
+                            <img th:src="@{/images/ShopMefy-removebg-preview.png}" alt="logo">
+                        </div>
+                        <p style="font-style: italic; font-size: 14px">Making E-commerce Fast and Easy for You </p>
+                            <div class="form-group">
+                                <input type="text" id="username" class="form-control form-control-lg" placeholder="Username">
+                            </div>
+                            <div class="form-group">
+                                <input type="password" id="password" class="form-control form-control-lg" placeholder="Password">
+                            </div>
+                            <div class="mt-3">
+                                <button id="login-btn" class="btn btn-block btn-primary btn-lg font-weight-medium auth-form-btn">ĐĂNG NHẬP</button>
+                            </div>
+                            <div class="my-2 d-flex justify-content-between align-items-center">
+                                <div class="form-check">
+                                        <input type="checkbox">
+                                        Duy trì đăng nhập
+                                </div>
+                                <a th:href="@{/forgot-password}" class="auth-link text-black">Quên mật khẩu?</a>
+                            </div>
+<!--                            <div class="mb-2">-->
+<!--                                <button type="button" class="btn btn-block btn-facebook auth-form-btn">-->
+<!--                                    <i class="ti-facebook me-2"></i>Kết nối với facebook-->
+<!--                                </button>-->
+<!--                            </div>-->
+<!--                            <div class="text-center mt-4 fw-light">-->
+<!--                                Bạn không có tài khoản? <a th:href="@{/register.html}" class="text-primary">Đăng ký</a>-->
+<!--                            </div>-->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script th:src="@{/vendors/js/vendor.bundle.base.js}"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"
+        integrity="sha512-VEd+nq25CkR676O+pLBnDW09R7VQX9Mdiij052gVCp5yVH3jGtH70Ho/UUv4mJDsEdTvqRCFZg0NKGiojGnUCw=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script>
+    const usernameEl = document.getElementById("username");
+    const passwordEl = document.getElementById("password");
+    const btnLogin = document.getElementById("login-btn");
+
+    btnLogin.addEventListener("click", async () => {
+        await login();
+    });
+
+    // Xử lý sự kiện khi ấn phím trong trường mật khẩu
+    passwordEl.addEventListener("keydown", async event => {
+        if (event.key === "Enter") {
+            await login();
+        }
+    });
+
+    async function login() {
+        try {
+            const request = {
+                username: usernameEl.value,
+                password: passwordEl.value
+            };
+
+            const response = await fetch("/api/v1/auth/login-handle", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(request)
+            });
+
+            if (response.ok) {
+                toastr.success("Đăng nhập thành công");
+                const redirectUrl = await response.text();
+                setTimeout(function () {
+                    window.location.href = redirectUrl;
+                },500)
+            } else {
+                toastr.error("Tên đăng nhập hoặc mật khẩu chưa đúng");
+                throw new Error("Login failed");
+            }
+        } catch (error) {
+            console.log(error);
+        }
+    }
+</script>
+</body>
+
+</html>

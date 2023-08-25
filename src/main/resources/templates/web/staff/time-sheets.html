@@ -1,0 +1,523 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="https://www.thymeleaf.org"
+      th:replace="~{layout/layout.html :: main-fragment(~{:: title}, ~{:: .css}, ~{:: .content-wrapper}, ~{:: .js})}"
+      xmlns="http://www.w3.org/1999/html">
+
+<head>
+    <title>Nhân viên - ShopMefy</title>
+
+    <th:block class="css">
+        <link rel="stylesheet" th:href="@{/css/staffs/time-sheets.css}">
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+    </th:block>
+
+</head>
+<body>
+<div class="content-wrapper">
+    <div class="card">
+        <div class="card-body">
+            <div class="container">
+        <div class="datepicker-container">
+            <span>Chọn ngày: </span>
+            <input type="text" id="datePicker">
+        </div>
+        <div class="timetable-img text-center">
+            <h4 class="mb-3">Bảng phân chia thời gian làm việc</h4>
+        </div>
+        <div class="table-container">
+            <table class="table table-bordered text-center">
+                <thead>
+                <tr class="bg-light-gray">
+                    <th class="text-uppercase">Thời gian
+                    </th>
+                    <th class="text-uppercase" th:data-work-day="${dayOfWeek[0]}" th:data-index="0">Thứ hai
+                        <div></div>
+                    </th>
+                    <th class="text-uppercase" th:data-work-day="${dayOfWeek[1]}" th:data-index="1">Thứ ba
+                        <div></div></th>
+                    <th class="text-uppercase" th:data-work-day="${dayOfWeek[2]}" th:data-index="2">Thứ tư
+                        <div></div></th>
+                    <th class="text-uppercase" th:data-work-day="${dayOfWeek[3]}" th:data-index="3">Thứ năm
+                        <div></div></th>
+                    <th class="text-uppercase" th:data-work-day="${dayOfWeek[4]}" th:data-index="4">Thứ sáu
+                        <div></div></th>
+                    <th class="text-uppercase" th:data-work-day="${dayOfWeek[5]}" th:data-index="5">Thứ bảy
+                        <div></div></th>
+                    <th class="text-uppercase" th:data-work-day="${dayOfWeek[6]}" th:data-index="6">Chủ nhật
+                        <div></div></th>
+                    <th></th>
+                </tr>
+                </thead>
+                <tbody>
+                <th:block th:if="${workShiftList != null and !#lists.isEmpty(workShiftList)}" th:each="workShift, iterStat: ${workShiftList}">
+                    <tr th:unless="${iterStat.last}" th:data-work-shift-id="${workShift.id}" th:data-order-shift="${iterStat.index}">
+                        <td class="" style="width: 200px" >
+                            <input class="input-name-work-shift text-uppercase fw-bolder text-center" placeholder="Tên ca làm việc" th:value="${workShift.name}">
+                            <div class="selected-time" th:text="${#temporals.format(workShift.startShift, 'HH:mm')} + '-' + ${#temporals.format(workShift.endShift, 'HH:mm')}"></div>
+                            <div class="choose-time" style="display: none">
+                                <input type="text" class="timepicker start-time" placeholder="Select start time">
+                                <span>-</span>
+                                <input type="text" class="timepicker end-time" placeholder="Select end time" >
+                            </div>
+                            <button class="edit-time"><i class="ti ti-pencil"></i></button>
+                            <button class="check-time"><i class="ti ti-check"></i></button>
+                        </td>
+                        <th:block th:if="${shiftAssignmentList != null and !#lists.isEmpty(shiftAssignmentList)}" th:each="shiftAssignment : ${shiftAssignmentList}" >
+                            <td th:if="${shiftAssignment.workShiftId == workShift.id}" th:data-shift-assignment-id="${shiftAssignment.id}">
+                                <div class="">
+                                    <select class="custom-select">
+                                        <option value="" selected disabled>--Chọn nhân viên--</option>
+                                        <th:block th:each="staff : ${staffList}">
+                                            <option th:value="${staff.id}" th:text="${staff.fullName}" th:selected="${!#lists.isEmpty(shiftAssignment.staffIds) and staff.id == shiftAssignment.staffIds[0]}"></option>
+                                        </th:block>
+                                    </select>
+                                </div>
+                            </td>
+                        </th:block>
+                        <th:block th:unless="${shiftAssignmentList != null and !#lists.isEmpty(shiftAssignmentList)}">
+                            <td>
+                                <div class="">
+                                    <select class="custom-select">
+                                        <option value="" selected disabled>--Chọn nhân viên--</option>
+                                        <th:block th:each="staff : ${staffList}">
+                                            <option th:value="${staff.id}" th:text="${staff.fullName}"></option>
+                                        </th:block>
+                                    </select>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="">
+                                    <select class="custom-select">
+                                        <option value="" selected disabled>--Chọn nhân viên--</option>
+                                        <th:block th:each="staff : ${staffList}">
+                                            <option th:value="${staff.id}" th:text="${staff.fullName}"></option>
+                                        </th:block>
+                                    </select>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="">
+                                    <select class="custom-select">
+                                        <option value="" selected disabled>--Chọn nhân viên--</option>
+                                        <th:block th:each="staff : ${staffList}">
+                                            <option th:value="${staff.id}" th:text="${staff.fullName}"></option>
+                                        </th:block>
+                                    </select>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="">
+                                    <select class="custom-select">
+                                        <option value="" selected disabled>--Chọn nhân viên--</option>
+                                        <th:block th:each="staff : ${staffList}">
+                                            <option th:value="${staff.id}" th:text="${staff.fullName}"></option>
+                                        </th:block>
+                                    </select>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="">
+                                    <select class="custom-select">
+                                        <option value="" selected disabled>--Chọn nhân viên--</option>
+                                        <th:block th:each="staff : ${staffList}">
+                                            <option th:value="${staff.id}" th:text="${staff.fullName}"></option>
+                                        </th:block>
+                                    </select>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="">
+                                    <select class="custom-select">
+                                        <option value="" selected disabled>--Chọn nhân viên--</option>
+                                        <th:block th:each="staff : ${staffList}">
+                                            <option th:value="${staff.id}" th:text="${staff.fullName}"></option>
+                                        </th:block>
+                                    </select>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="">
+                                    <select class="custom-select">
+                                        <option value="" selected disabled>--Chọn nhân viên--</option>
+                                        <th:block th:each="staff : ${staffList}">
+                                            <option th:value="${staff.id}" th:text="${staff.fullName}"></option>
+                                        </th:block>
+                                    </select>
+                                </div>
+                            </td>
+                        </th:block>
+                        <td><button class="shift-delete"><i class="ti ti-trash"></i></button></td>
+                    </tr>
+                    <th:block th:if="${iterStat.last}">
+                        <tr th:data-work-shift-id="${workShift.id}" th:data-order-shift="${iterStat.index}">
+                            <td class="last-row" style="width: 200px" >
+                                <input class="input-name-work-shift text-uppercase fw-bolder text-center" placeholder="Tên ca làm việc" th:value="${workShift.name}">
+                                <div class="selected-time" th:text="${#temporals.format(workShift.startShift, 'HH:mm')} + '-' + ${#temporals.format(workShift.endShift, 'HH:mm')}"></div>
+                                <div class="choose-time" style="display: none">
+                                    <input type="text" class="timepicker start-time" placeholder="Select start time">
+                                    <span>-</span>
+                                    <input type="text" class="timepicker end-time" placeholder="Select end time" >
+                                </div>
+                                <button class="edit-time"><i class="ti ti-pencil"></i></button>
+                                <button class="check-time"><i class="ti ti-check"></i></button>
+                            </td>
+                            <th:block th:if="${shiftAssignmentList != null and !#lists.isEmpty(shiftAssignmentList)}" th:each="shiftAssignment : ${shiftAssignmentList}" >
+                                <td th:if="${shiftAssignment.workShiftId == workShift.id}" th:data-shift-assignment-id="${shiftAssignment.id}">
+                                    <div class="">
+                                        <select class="custom-select">
+                                            <option value="" selected disabled>--Chọn nhân viên--</option>
+                                            <th:block th:each="staff : ${staffList}">
+                                                <option th:value="${staff.id}" th:text="${staff.fullName}" th:selected="${!#lists.isEmpty(shiftAssignment.staffIds) and staff.id == shiftAssignment.staffIds[0]}"></option>
+                                            </th:block>
+                                        </select>
+                                    </div>
+                                </td>
+                            </th:block>
+                            <th:block th:unless="${shiftAssignmentList != null and !#lists.isEmpty(shiftAssignmentList)}">
+                                <td>
+                                    <div class="">
+                                        <select class="custom-select">
+                                            <option value="" selected disabled>--Chọn nhân viên--</option>
+                                            <th:block th:each="staff : ${staffList}">
+                                                <option th:value="${staff.id}" th:text="${staff.fullName}"></option>
+                                            </th:block>
+                                        </select>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="">
+                                        <select class="custom-select">
+                                            <option value="" selected disabled>--Chọn nhân viên--</option>
+                                            <th:block th:each="staff : ${staffList}">
+                                                <option th:value="${staff.id}" th:text="${staff.fullName}"></option>
+                                            </th:block>
+                                        </select>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="">
+                                        <select class="custom-select">
+                                            <option value="" selected disabled>--Chọn nhân viên--</option>
+                                            <th:block th:each="staff : ${staffList}">
+                                                <option th:value="${staff.id}" th:text="${staff.fullName}"></option>
+                                            </th:block>
+                                        </select>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="">
+                                        <select class="custom-select">
+                                            <option value="" selected disabled>--Chọn nhân viên--</option>
+                                            <th:block th:each="staff : ${staffList}">
+                                                <option th:value="${staff.id}" th:text="${staff.fullName}"></option>
+                                            </th:block>
+                                        </select>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="">
+                                        <select class="custom-select">
+                                            <option value="" selected disabled>--Chọn nhân viên--</option>
+                                            <th:block th:each="staff : ${staffList}">
+                                                <option th:value="${staff.id}" th:text="${staff.fullName}"></option>
+                                            </th:block>
+                                        </select>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="">
+                                        <select class="custom-select">
+                                            <option value="" selected disabled>--Chọn nhân viên--</option>
+                                            <th:block th:each="staff : ${staffList}">
+                                                <option th:value="${staff.id}" th:text="${staff.fullName}"></option>
+                                            </th:block>
+                                        </select>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="">
+                                        <select class="custom-select">
+                                            <option value="" selected disabled>--Chọn nhân viên--</option>
+                                            <th:block th:each="staff : ${staffList}">
+                                                <option th:value="${staff.id}" th:text="${staff.fullName}"></option>
+                                            </th:block>
+                                        </select>
+                                    </div>
+                                </td>
+                            </th:block>
+                            <td><button class="shift-delete"><i class="ti ti-trash"></i></button></td>
+
+                        </tr>
+                    </th:block>
+                </th:block>
+
+
+
+                <th:block th:unless="${workShiftList != null and !#lists.isEmpty(workShiftList)}">
+                <tr th:data-order-shift="0">
+                    <td class="" style="width: 200px">
+                        <input class="input-name-work-shift text-uppercase fw-bolder text-center" placeholder="Tên ca làm việc" value="Ca 1" disabled>
+                        <div class="selected-time"></div>
+                        <div class="choose-time">
+                            <input type="text" class="timepicker start-time" placeholder="Select start time" disabled>
+                            <span>-</span>
+                            <input type="text" class="timepicker end-time" placeholder="Select end time" disabled>
+                        </div>
+                        <button class="edit-time"><i class="ti ti-pencil"></i></button>
+                        <button class="check-time"><i class="ti ti-check"></i></button>
+                    </td>
+                    <td>
+                        <div class="">
+                            <select class="custom-select">
+                                <option value="" selected disabled>--Chọn nhân viên--</option>
+                                <th:block th:each="staff : ${staffList}">
+                                    <option th:value="${staff.id}" th:text="${staff.fullName}"></option>
+                                </th:block>
+                            </select>
+                        </div>
+                    </td>
+                    <td>
+                        <select class="custom-select">
+                            <option value="" selected disabled>--Chọn nhân viên--</option>
+                            <th:block th:each="staff : ${staffList}">
+                                <option th:value="${staff.id}" th:text="${staff.fullName}"></option>
+                            </th:block>
+                        </select>
+                    </td>
+
+                    <td>
+                        <select class="custom-select">
+                            <option value="" selected disabled>--Chọn nhân viên--</option>
+                            <th:block th:each="staff : ${staffList}">
+                                <option th:value="${staff.id}" th:text="${staff.fullName}"></option>
+                            </th:block>
+                        </select>
+                    </td>
+                    <td>
+                        <select class="custom-select">
+                            <option value="" selected disabled>--Chọn nhân viên--</option>
+                            <th:block th:each="staff : ${staffList}">
+                                <option th:value="${staff.id}" th:text="${staff.fullName}"></option>
+                            </th:block>
+                        </select>
+                    </td>
+                    <td>
+                        <select class="custom-select">
+                            <option value="" selected disabled>--Chọn nhân viên--</option>
+                            <th:block th:each="staff : ${staffList}">
+                                <option th:value="${staff.id}" th:text="${staff.fullName}"></option>
+                            </th:block>
+                        </select>
+                    </td>
+                    <td>
+                        <select class="custom-select">
+                            <option value="" selected disabled>--Chọn nhân viên--</option>
+                            <th:block th:each="staff : ${staffList}">
+                                <option th:value="${staff.id}" th:text="${staff.fullName}"></option>
+                            </th:block>
+                        </select>
+                    </td>
+                    <td>
+                        <select class="custom-select">
+                            <option value="" selected disabled>--Chọn nhân viên--</option>
+                            <th:block th:each="staff : ${staffList}">
+                                <option th:value="${staff.id}" th:text="${staff.fullName}"></option>
+                            </th:block>
+                        </select>
+                    </td>
+                    <td><button class="shift-delete"><i class="ti ti-trash"></i></button></td>
+                </tr>
+
+                <tr th:data-order-shift="1">
+                    <td class="" style="width: 200px">
+                        <input class="input-name-work-shift text-uppercase fw-bolder text-center" placeholder="Tên ca làm việc" value="Ca 2" disabled>
+                        <div class="selected-time"></div>
+                        <div class="choose-time">
+                            <input type="text" class="timepicker start-time" placeholder="Select start time" disabled>
+                            <span>-</span>
+                            <input type="text" class="timepicker end-time" placeholder="Select end time" disabled>
+                        </div>
+                        <button class="edit-time"><i class="ti ti-pencil"></i></button>
+                        <button class="check-time"><i class="ti ti-check"></i></button>
+                    </td>
+                    <td>
+                        <div class="">
+                            <select class="custom-select">
+                                <option value="" selected disabled>--Chọn nhân viên--</option>
+                                <th:block th:each="staff : ${staffList}">
+                                    <option th:value="${staff.id}" th:text="${staff.fullName}"></option>
+                                </th:block>
+                            </select>
+                        </div>
+                    </td>
+                    <td>
+                        <select class="custom-select">
+                            <option value="" selected disabled>--Chọn nhân viên--</option>
+                            <th:block th:each="staff : ${staffList}">
+                                <option th:value="${staff.id}" th:text="${staff.fullName}"></option>
+                            </th:block>
+                        </select>
+                    </td>
+
+                    <td>
+                        <select class="custom-select">
+                            <option value="" selected disabled>--Chọn nhân viên--</option>
+                            <th:block th:each="staff : ${staffList}">
+                                <option th:value="${staff.id}" th:text="${staff.fullName}"></option>
+                            </th:block>
+                        </select>
+                    </td>
+                    <td>
+                        <select class="custom-select">
+                            <option value="" selected disabled>--Chọn nhân viên--</option>
+                            <th:block th:each="staff : ${staffList}">
+                                <option th:value="${staff.id}" th:text="${staff.fullName}"></option>
+                            </th:block>
+                        </select>
+                    </td>
+                    <td>
+                        <select class="custom-select">
+                            <option value="" selected disabled>--Chọn nhân viên--</option>
+                            <th:block th:each="staff : ${staffList}">
+                                <option th:value="${staff.id}" th:text="${staff.fullName}"></option>
+                            </th:block>
+                        </select>
+                    </td>
+                    <td>
+                        <select class="custom-select">
+                            <option value="" selected disabled>--Chọn nhân viên--</option>
+                            <th:block th:each="staff : ${staffList}">
+                                <option th:value="${staff.id}" th:text="${staff.fullName}"></option>
+                            </th:block>
+                        </select>
+                    </td>
+                    <td>
+                        <select class="custom-select">
+                            <option value="" selected disabled>--Chọn nhân viên--</option>
+                            <th:block th:each="staff : ${staffList}">
+                                <option th:value="${staff.id}" th:text="${staff.fullName}"></option>
+                            </th:block>
+                        </select>
+                    </td>
+                    <td><button class="shift-delete"><i class="ti ti-trash"></i></button></td>
+                </tr>
+
+                <tr class="last-row" th:data-order-shift="2">
+                    <td class="" style="width: 200px">
+                        <input class="input-name-work-shift text-uppercase fw-bolder text-center" placeholder="Tên ca làm việc" value="Ca 3" disabled>
+                        <div class="selected-time"></div>
+                        <div class="choose-time">
+                            <input type="text" class="timepicker start-time" placeholder="Select start time" disabled>
+                            <span>-</span>
+                            <input type="text" class="timepicker end-time" placeholder="Select end time" disabled>
+                        </div>
+                        <button class="edit-time"><i class="ti ti-pencil"></i></button>
+                        <button class="check-time"><i class="ti ti-check"></i></button>
+                    </td>
+                    <td>
+                        <div>
+                            <select class="custom-select">
+                                <option value="" selected disabled>--Chọn nhân viên--</option>
+                                <th:block th:each="staff : ${staffList}">
+                                    <option th:value="${staff.id}" th:text="${staff.fullName}"></option>
+                                </th:block>
+                            </select>
+                        </div>
+                    </td>
+                    <td>
+                        <select class="custom-select">
+                            <option value="" selected disabled>--Chọn nhân viên--</option>
+                            <th:block th:each="staff : ${staffList}">
+                                <option th:value="${staff.id}" th:text="${staff.fullName}"></option>
+                            </th:block>
+                        </select>
+                    </td>
+
+                    <td>
+                        <select class="custom-select">
+                            <option value="" selected disabled>--Chọn nhân viên--</option>
+                            <th:block th:each="staff : ${staffList}">
+                                <option th:value="${staff.id}" th:text="${staff.fullName}"></option>
+                            </th:block>
+                        </select>
+                    </td>
+                    <td>
+                        <select class="custom-select">
+                            <option value="" selected disabled>--Chọn nhân viên--</option>
+                            <th:block th:each="staff : ${staffList}">
+                                <option th:value="${staff.id}" th:text="${staff.fullName}"></option>
+                            </th:block>
+                        </select>
+                    </td>
+                    <td>
+                        <select class="custom-select">
+                            <option value="" selected disabled>--Chọn nhân viên--</option>
+                            <th:block th:each="staff : ${staffList}">
+                                <option th:value="${staff.id}" th:text="${staff.fullName}"></option>
+                            </th:block>
+                        </select>
+                    </td>
+                    <td>
+                        <select class="custom-select">
+                            <option value="" selected disabled>--Chọn nhân viên--</option>
+                            <th:block th:each="staff : ${staffList}">
+                                <option th:value="${staff.id}" th:text="${staff.fullName}"></option>
+                            </th:block>
+                        </select>
+                    </td>
+                    <td>
+                        <select class="custom-select">
+                            <option value="" selected disabled>--Chọn nhân viên--</option>
+                            <th:block th:each="staff : ${staffList}">
+                                <option th:value="${staff.id}" th:text="${staff.fullName}"></option>
+                            </th:block>
+                        </select>
+                    </td>
+                    <td><button class="shift-delete"><i class="ti ti-trash"></i></button></td>
+
+                </tr>
+                </th:block>
+                <tr class="bottom-hover-trigger"></tr>
+                </tbody>
+
+            </table>
+            <button class="add-row-button">+</button>
+            <button id="btn-save-session" class="btn btn-primary">Lưu lại</button>
+        </div>
+    </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+
+
+
+<!-- content-wrapper ends -->
+<th:block class="js">
+    <!-- endinject -->
+    <!-- Plugin js for this page -->
+
+    <!-- endinject -->
+    <!-- Custom js for this page-->
+    <!-- End custom js for this page-->
+    <script th:inline="javascript">
+        const staffList = /*[[${staffList}]]*/ [];
+        let workShiftList = /*[[${workShiftList}]]*/ [];
+        console.log(workShiftList)
+        let shiftAssignmentList = /*[[${shiftAssignmentList}]]*/ [];
+        let dayOfWeek = /*[[${dayOfWeek}]]*/ [];
+    </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    <script th:src="@{/js/staff/time-sheet.js}"></script>
+
+
+</th:block>
+
+</body>
+
+</html>

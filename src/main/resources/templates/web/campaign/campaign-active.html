@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="https://www.thymeleaf.org"
+      th:replace="~{layout/layout.html :: main-fragment(~{:: title}, ~{:: .css}, ~{:: .content-wrapper}, ~{:: .js})}"
+      xmlns="http://www.w3.org/1999/html">
+
+<head>
+    <title>Chiến dịch - ShopMefy</title>
+
+    <th:block class="css">
+        <link rel="stylesheet" th:href="@{/css/voucher/all-voucher.css}">
+    </th:block>
+
+</head>
+<body>
+<div class="content-wrapper">
+    <div class="card mt-3">
+        <div class="card-body">
+            <div class="table-container">
+                <div class="table-responsive">
+                    <table class="table table-hover">
+                        <thead>
+                        <tr>
+                            <th>
+                                Tên chiến dịch
+                            </th>
+                            <th>
+                                Giảm giá
+                            </th>
+                            <th>
+                                Loại giảm giá
+                            </th>
+                            <th>
+                                Trạng thái
+                            </th>
+                            <th>
+
+                            </th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <th:block th:each="campaign : ${campaignList}">
+                            <tr th:data-campaign-id="${campaign.id}">
+                                <td th:text="${campaign.title}"></td>
+                                <td th:text="${campaign.reducedPrice}"></td>
+                                <td th:text="${campaign.reduceType}"></td>
+                                <td>
+                                    <label class="switch">
+                                        <input type="checkbox" th:checked="${campaign.isActive}">
+                                        <span class="slider round">
+                                                <span class="switch-label on">ON</span>
+                                                <span class="switch-label off">OFF</span>
+                                              </span>
+                                    </label>
+                                </td>
+                                <td>
+                                    <button class="btn btn-info btn-view-detail">Xem chi tiết
+                                    </button>
+                                </td>
+                            </tr>
+                        </th:block>
+                        </tbody>
+                    </table>
+
+
+                </div>
+            </div>
+            <div class="d-flex justify-content-center " id="pagination">
+
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+
+
+
+<!-- content-wrapper ends -->
+<th:block class="js">
+    <!-- endinject -->
+    <!-- Plugin js for this page -->
+
+    <!-- endinject -->
+    <!-- Custom js for this page-->
+
+    <script
+            src="https://code.jquery.com/jquery-3.7.0.min.js"
+            integrity="sha256-2Pmvv0kuTBOenSvLm6bvfBSSHrUJ+3A7x6P5Ebd07/g="
+            crossorigin="anonymous"></script>
+    <!-- End custom js for this page-->
+    <script th:inline="javascript">
+        const campaignList = /*[[${campaignList}]]*/ [];
+        console.log(campaignList)
+    </script>
+    <script th:src="@{/js/voucher/all-voucher.js}"></script>
+
+</th:block>
+
+</body>
+
+</html>

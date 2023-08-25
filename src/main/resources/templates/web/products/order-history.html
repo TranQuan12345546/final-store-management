@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="https://www.thymeleaf.org"
+      th:replace="~{layout/layout.html :: main-fragment(~{:: title}, ~{:: .css}, ~{:: .content-wrapper}, ~{:: .js})}"
+      xmlns="http://www.w3.org/1999/html">
+
+<head>
+  <title>Order - ShopMefy</title>
+
+  <th:block class="css">
+    <link rel="stylesheet" th:href="@{/css/products/inventory.css}">
+  </th:block>
+
+</head>
+<body>
+<div class="content-wrapper">
+  <div class="row">
+    <div class="col-md-2">
+      <button id="dropdown-menu-button" class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+        Chọn nhóm hàng
+      </button>
+      <ul class="dropdown-menu custom-scrollbar">
+        <li class="row py-1">
+          <span class="col-md-10">Chọn tất cả</span>
+        </li>
+        <th:block th:each="groupProduct : ${groupProductList}">
+          <li class="row py-1" >
+            <span class="col-md-9" th:text="${groupProduct.name}"></span>
+          </li>
+        </th:block>
+      </ul>
+    </div>
+    <div class="col-md-2">
+      <form class="search-form" action="#">
+        <i class="icon-search search-product"></i>
+        <input id="searchInput" type="search" class="form-control" placeholder="Nhập tên hàng" title="Tìm kiếm theo tên hàng">
+        <div class="container">
+          <div class="search-results-container custom-scrollbar">
+            <ul id="searchResults" class="list-group"></ul>
+          </div>
+        </div>
+      </form>
+    </div>
+    <div class="col-md-8 custom-div d-flex justify-content-end">
+      <button id="returnOrder" class="btn btn-primary mx-1 my-2">
+        <i class="ti ti-back-left"></i><span class="mx-lg-2"> Trả hàng</span></button>
+      <button id="printOrder" class="btn btn-primary mx-1 my-2">
+        <i class="typcn typcn-printer me-2 my-2"></i>
+        In hoá đơn
+      </button>
+      <button id="btn-import" onclick="document.getElementById('importExcel').click()" class="btn btn-primary mx-1 my-2">
+        <input type="file" id="importExcel" style="display: none;">
+        <i class="ti ti-import me-2 my-2"></i>
+        Import
+      </button>
+      <button id="btn-export" class="btn btn-primary mx-1 my-2">
+        <i class="ti ti-export me-2"></i>Xuất file
+      </button>
+    </div>
+  </div>
+  <div class="card">
+    <div class="card-body">
+      <div class="table-container">
+        <div class="table-responsive">
+          <table class="table table-hover">
+            <thead>
+            <tr>
+              <th>
+                <div class="input-group">
+                  <input id="checkAll" class="form-check-input" type="checkbox" value="" aria-label="">
+                </div>
+              </th>
+              <th>
+                Mã hoá đơn
+              </th>
+              <th>
+                Thời gian
+              </th>
+              <th>
+                Sản phẩm bán
+              </th>
+              <th>
+                Số lượng
+              </th>
+              <th>
+                Giảm giá
+              </th>
+              <th>
+                Tổng thu
+              </th>
+              <th>
+                Khách hàng
+              </th>
+              <th>
+                Người bán
+              </th>
+            </tr>
+            </thead>
+            <tbody>
+            <th:block th:each="order : ${page.getContent()}">
+              <tr th:data-order-id="${order.id}">
+                <td>
+                  <div class="input-group">
+                    <input class="form-check-input" type="checkbox" value="" aria-label="">
+                  </div>
+                </td>
+                <td th:text="${order.orderNumber}">
+                </td >
+                <td th:text="${#temporals.format(order.orderDate, 'dd/MM/yyyy HH:mm')}">
+                </td >
+                <td th:text="${order.productName}">
+                </td>
+                <td>
+                  <span th:text="${#numbers.formatDecimal(order.quantity, 0, 'POINT', 0, 'COMMA')}">10.00</span>
+                </td>
+                <td>
+                  <span th:text="${#numbers.formatDecimal(order.discount, 0, 'POINT', 0, 'COMMA')}">10.00</span>
+                </td>
+                <td>
+                  <span th:text="${#numbers.formatDecimal(order.totalPrice, 0, 'POINT', 0, 'COMMA')}">10.00</span>
+                </td>
+                <td th:text="${order.clientName}">
+                </td>
+                <td th:text="${order.createdBy}"></td>
+                <td class="group-product-column" th:text="${order.getGroupProductName}" style="display: none;"></td>
+              </tr>
+            </th:block>
+            </tbody>
+          </table>
+
+
+        </div>
+      </div>
+      <!--          phân trang-->
+      <div class="d-flex justify-content-center " id="pagination">
+        <ul class="pagination mb-0">
+          <li class="paginate_button page-item previous"
+              th:classappend="${currentPage == 1 ? 'disabled' : ''}" id="example2_previous">
+            <a th:href="@{/order/order-history/{storeId}?page={pageNumber} (pageNumber=${currentPage-1}, storeId = ${storeId})}"
+               aria-controls="example2" data-dt-idx="0" tabindex="0" class="page-link">Previous</a>
+          </li>
+          <th:block
+                  th:with="numbers=${T(com.example.storemanagement.utils.Utils).createList(page.getTotalPages())}">
+            <li th:each="number : ${numbers}" class="paginate_button page-item"
+                th:classappend="${number == currentPage ? 'active' : ''}">
+              <a th:href="@{/order/order-history/{storeId}?page={pageNumber} (pageNumber=${number}, storeId = ${storeId})}"
+                 aria-controls="example2" data-dt-idx="1" tabindex="0" class="page-link"
+                 th:text="${number}"></a>
+            </li>
+          </th:block>
+          <li class="paginate_button page-item next"
+              th:classappend="${currentPage == page.getTotalPages() ? 'disabled' : ''}"
+              id="example2_next">
+            <a th:href="@{/order/order-history/{storeId}?page={pageNumber} (pageNumber=${currentPage+1}, storeId = ${storeId})}"
+               aria-controls="example2" data-dt-idx="7" tabindex="0" class="page-link">Next</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal Xác nhận xoá -->
+  <div id="confirmModal" class="modal fade" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Xác nhận xoá</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true"></span>
+          </button>
+        </div>
+        <div class="modal-body ">
+          <p>Chỉ có thể trả hàng sau 10 ngày, bạn có chắc chắn muốn trả lại hoá đơn này cho khách?</p>
+        </div>
+        <div class="modal-footer">
+          <button id="confirmDelete" type="button" class="btn btn-danger">Xác nhận</button>
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" aria-label="Close">Hủy</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+
+
+
+
+
+<!-- content-wrapper ends -->
+<th:block class="js">
+  <!-- endinject -->
+  <!-- Plugin js for this page -->
+
+  <!-- endinject -->
+  <!-- Custom js for this page-->
+
+  <script
+          src="https://code.jquery.com/jquery-3.7.0.min.js"
+          integrity="sha256-2Pmvv0kuTBOenSvLm6bvfBSSHrUJ+3A7x6P5Ebd07/g="
+          crossorigin="anonymous"></script>
+  <!-- End custom js for this page-->
+  <script th:inline="javascript">
+    const orderList = /*[[${page.getContent()}]]*/ [];
+    console.log(orderList)
+  </script>
+  <script th:src="@{/js/order/order.js}">
+
+
+  </script>
+</th:block>
+
+</body>
+
+</html>

@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="https://www.thymeleaf.org"
+      th:replace="~{layout/layout.html :: main-fragment(~{:: title}, ~{:: .css}, ~{:: .content-wrapper}, ~{:: .js})}"
+      xmlns="http://www.w3.org/1999/html">
+
+<head>
+  <title>Voucher - ShopMefy</title>
+
+  <th:block class="css">
+    <link rel="stylesheet" th:href="@{/css/voucher/create-voucher.css}">
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
+  </th:block>
+
+</head>
+<body>
+<div class="content-wrapper">
+  <div class="card">
+    <div class="card-body">
+      <div class="content-header mb-3 d-flex justify-content-between align-items-center">
+        <h4>Tạo mã Voucher</h4>
+        <button id="send-request" class="btn btn-behance">Lưu lại</button>
+      </div>
+      <div class="content-body d-flex border-radius-5">
+        <div class="left-panel ">
+          <div class="flex-column mb-3">
+            <label class="small mb-1" for="inputTitle">Tiêu đề</label>
+            <input class="form-control" id="inputTitle" type="text" placeholder="Nhập tiêu đề">
+          </div>
+          <div class="flex-column mb-3">
+            <label class="small mb-1" for="inputCode">Mã kích hoạt</label>
+            <input class="form-control" id="inputCode" type="text" placeholder="Nhập mã kích hoạt">
+            <p class="card-description">Mã kích hoạt là dãy có độ dài 10 kí tự, bao gồm ký tự viết hoa từ A-Z và số từ 0-9</p>
+          </div>
+          <div class="row mb-3">
+            <div class="col-md-6 flex-column mb-3">
+              <label class="small mb-1">Khuyến mãi theo</label>
+              <select class="form-control" id="discountType">
+                <option value="1">Phần trăm</option>
+                <option value="2">Giá trị</option>
+              </select>
+            </div>
+            <div class="col-md-6 flex-column mb-3">
+              <label class="small mb-1" for="inputReducedPrice">Mức giảm</label>
+              <input class="form-control" id="inputReducedPrice" type="text" placeholder="Nhập mức giảm">
+              <div class="percent"><span class=""></span>%</div>
+            </div>
+          </div>
+          <div class="flex-column mb-3">
+            <label class="small mb-1" for="inputQuantity">Tổng số lượng mã tối đa</label>
+            <input class="form-control" id="inputQuantity" type="text" placeholder="Nhập số lượng">
+          </div>
+          <div class="flex-column mb-3">
+            <label class="small mb-1" for="inputQuantityPerClient">Lượt sử dụng tối đa/Người mua</label>
+            <input class="form-control" id="inputQuantityPerClient" type="text" placeholder="Nhập số lượng" value="1">
+          </div>
+          <div class="flex-column mb-3">
+            <label class="small mb-1" for="inputTime">Thời gian sử dụng mã</label>
+            <input class="form-control" type="text" id="inputTime" name="daterange" value="" />
+          </div>
+        </div>
+        <div class="right-panel">
+          <div class="mb-3"><span class="">Lựa chọn sản phẩm áp dụng</span></div>
+          <button id="all-product" class="btn btn-behance">Tất cả sản phẩm</button>
+          <button id="choose-group" class="btn btn-behance">Chọn theo nhóm hàng</button>
+          <button id="choose-product" class="btn btn-behance">Chọn theo sản phẩm</button>
+
+          <div class="list-group-container" style="display: none;">
+          </div>
+
+          <div class="all-product-container" style="display: none;">
+            <div class="table-container">
+              <div class="table-responsive">
+                <table class="table table-hover">
+                  <thead>
+                  <tr>
+                    <th>
+                      <div class="input-group">
+                        <input id="checkAll"  class="form-check-input" type="checkbox" value="" aria-label="">
+                      </div>
+                    </th>
+                    <th>Mã sản phẩm</th>
+                    <th>Tên sản phẩm</th>
+                    <th>Giá bán</th>
+                  </tr>
+                  </thead>
+                  <tbody>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+            <div class="confirm">
+              <button id="confirm-product" class="btn btn-behance" style="float: right; margin-top: 5px">Xác nhận</button>
+            </div>
+          </div>
+          <div id="table-review" class="table-container" style="display: none;">
+            <div class="table-responsive">
+              <table class="table table-hover ">
+                <thead>
+                <tr>
+                  <th>Mã sản phẩm</th>
+                  <th>Tên sản phẩm</th>
+                  <th>Giá bán</th>
+                  <th>Giá sau khuyến mại</th>
+                </tr>
+                </thead>
+                <tbody>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+
+
+
+
+
+<!-- content-wrapper ends -->
+<th:block class="js">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
+  <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
+  <script th:inline="javascript">
+  const productList = /*[[${productList}]]*/ [];
+  console.log(productList)
+  </script>
+  <script th:src="@{/js/voucher/create-voucher.js}"></script>
+</th:block>
+
+</body>
+
+</html>

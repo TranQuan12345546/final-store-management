@@ -1,0 +1,211 @@
+<!DOCTYPE html >
+<html lang="en" xmlns:th="https://www.thymeleaf.org"
+      th:replace="~{layout/layout.html :: main-fragment(~{:: title}, ~{:: .css}, ~{:: .content-wrapper}, ~{:: .js})}"
+      xmlns="http://www.w3.org/1999/html">
+
+<head>
+    <title>Lịch sử kiểm hàng - ShopMefy</title>
+    <th:block class="css">
+        <link rel="stylesheet" th:href="@{/css/products/check-stock-history.css}">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/paginationjs/2.6.0/pagination.min.css"
+              integrity="sha512-K1k7jSn9RDKEcn/ugqVVvWYu0bcS3q1w6m/5pQSnrj0bCfIqF6Wk49lkmckSb4wglvTP9V17LtS0q0XxYccXbg=="
+              crossorigin="anonymous" referrerpolicy="no-referrer"/>
+        <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
+        <link rel="stylesheet" th:href="@{/vendors/font-awesome/css/font-awesome.min.css}">
+    </th:block>
+
+</head>
+<body>
+<div class="content-wrapper">
+    <div class="header">
+        <div class="row">
+            <div class="col-md-5">
+                <div id="report-range" style="background-color: transparent; cursor: pointer; padding: 5px 10px;">
+                    <i class="fa fa-calendar"></i>&nbsp;
+                    <span></span> <i class="fa fa-caret-down"></i>
+                </div>
+            </div>
+            <div class="col-md-7">
+                <h3 class="m-0 ms-2"> Hiển thị theo:  <span></span></h3>
+            </div>
+
+
+        </div>
+    </div>
+
+    <div class="content d-flex justify-content-center" style="min-height: 420px">
+        <th:block th:if="${#lists.isEmpty(inventoryList)}">
+            <div class="my-5">
+                <p class="no-result" style="font-size: 16px !important;">Bạn chưa thực hiện lần kiểm hàng nào <span></span></p>
+            </div>
+        </th:block>
+        <th:block  th:each="inventory : ${inventoryList}" th:with="number=${T(com.example.storemanagement.utils.Utils).randomInt(4)}">
+            <div class="history-container" th:data-inventory-id="${inventory.id}">
+                <div th:class="|card-box bg-${number == 1 ? 'blue' : number == 2 ? 'green' : number == 3 ? 'orange' : 'red'}|">
+                    <div class="inner">
+                        <h4><span th:text="${inventory.inventoryName}">Tran anh quan</span></h4>
+                        <p>Ngày thực hiện: <span th:text="${#temporals.format(inventory.createdAt, 'dd/MM/yyyy HH:mm')}">25-7-2023</span> </p>
+                        <p>Số lượng kiểm kê: <span th:text="${inventory.inventoryProductQuantity}">15</span>sp</p>
+                        <p>Người thực hiện: <span th:text="${inventory.createdBy}"></span></p>
+                    </div>
+                    <button href="#" class="history-detail-btn">Xem chi tiết</button>
+                </div>
+            </div>
+        </th:block>
+
+    </div>
+    <div class="d-flex justify-content-center mt-3" id="pagination">
+    </div>
+
+    <!--Modal chi tiết kết quả-->
+    <div id="table-result" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="myModalLabel">Kết quả kiểm kê</h5>
+                    <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body pt-2">
+                    <div class="row group-2">
+                        <div class="col-md-8 p-0">
+                            <button id="dropdown-menu-button" class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                Hiển thị theo nhóm hàng
+                            </button>
+                            <ul class="dropdown-menu custom-scrollbar" aria-labelledby="dropdown-menu-button">
+                                <li class="row py-1">
+                                    <span class="col-md-10">Chọn tất cả</span>
+                                </li>
+                                <th:block th:each="groupProduct : ${groupProductList}">
+                                    <li class="row py-1" >
+                                        <span class="col-md-9" th:data-group-product-id="${groupProduct.id}" th:text="${groupProduct.name}"></span>
+                                    </li>
+                                </th:block>
+                            </ul>
+                        </div>
+                        <div class="search col-md-4 p-0">
+                            <div class="search-product">
+                                <i class="ti ti-search "></i>
+                            </div>
+                            <input id="searchInput" type="search" class="form-control" placeholder="Nhập tên hàng hoặc mã hàng" title="Tìm kiếm theo tên hàng">
+                        </div>
+                    </div>
+                    <div class="card mt-3">
+                        <div class="card-body">
+                            <div class="table-container">
+                                <div class="table-responsive" style="min-height: 505px">
+                                    <table class="table table-hover">
+                                        <thead>
+                                        <tr style="padding: 20px">
+                                            <th>
+                                                Mã hàng
+                                            </th>
+                                            <th>
+                                                Tên hàng
+                                            </th>
+                                            <th>
+                                                Nhóm hàng
+                                            </th>
+                                            <th>
+                                                Giá vốn
+                                            </th>
+                                            <th>
+                                                SL trước khi kiểm
+                                            </th>
+                                            <th>
+                                                SL sau khi kiểm
+                                            </th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        </tbody>
+                                    </table>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="d-flex justify-content-center mt-3" id="pagination2">
+
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Đóng</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- Modal Xác nhận hoàn thành kiểm kê -->
+    <div id="confirmModal" class="modal fade" tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Xác nhận hoàn thành</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true"></span>
+                    </button>
+                </div>
+                <div class="modal-body ">
+                    <p>Vẫn còn sản phẩm chưa được kiểm tra, bạn vẫn muốn hoàn thành chứ?</p>
+                </div>
+                <div class="modal-footer">
+                    <button id="confirmDone" type="button" class="btn btn-danger">Xác nhận</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" aria-label="Close">Hủy</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Xác nhận thay đổi quantity -->
+    <div id="confirm-update" class="modal fade" tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Xác nhận thay đổi</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true"></span>
+                    </button>
+                </div>
+                <div class="modal-body ">
+                    <p>Thay đổi số lượng sản phẩm theo giá trị đã kiểm kê, sau khi thực hiện hành động này sẽ không thể hoàn tác, bạn vẫn muốn tiếp tục chứ?</p>
+                </div>
+                <div class="modal-footer">
+                    <button id="confirm-update-btn" type="button" class="btn btn-danger">Xác nhận</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" aria-label="Close">Hủy</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+
+
+
+<!-- content-wrapper ends -->
+<th:block class="js">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/paginationjs/2.6.0/pagination.min.js"
+            integrity="sha512-GzbaI5EsNzdEUq6/2XLYpr1y9CUZRIVsUeWTAFgULtQa5jZ3Nug8i0nZKM6jp9NffBCZhymPPQFcF0DK+JkRpw=="
+            crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
+
+    <script th:src="@{/js/check-stock/check-stock-history.js}"></script>
+    <script th:inline="javascript">
+        const inventoryList = /*[[${inventoryList}]]*/ [];
+        console.log(inventoryList)
+    </script>
+</th:block>
+
+
+
+</body>
+
+</html>

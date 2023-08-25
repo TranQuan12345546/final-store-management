@@ -1,0 +1,426 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="https://www.thymeleaf.org" th:fragment="main-fragment(title, css, content, js)" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <title th:replace="${title}">ShopMefy </title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,300;1,400;1,500;1,700;1,900&display=swap" rel="stylesheet">
+
+
+  <link rel="stylesheet" th:href="@{/vendors/feather/feather.css}">
+  <link rel="stylesheet" th:href="@{/vendors/mdi/css/materialdesignicons.min.css}">
+  <link rel="stylesheet" th:href="@{/vendors/ti-icons/css/themify-icons.css}">
+  <link rel="stylesheet" th:href="@{/vendors/typicons/typicons.css}">
+  <link rel="stylesheet" th:href="@{/vendors/simple-line-icons/css/simple-line-icons.css}">
+  <link rel="stylesheet" th:href="@{/vendors/css/vendor.bundle.base.css}">
+
+
+
+  <th:block th:replace="${css} ?: ~{}"></th:block>
+  <!-- inject:css -->
+  <link rel="stylesheet" th:href="@{/css/vertical-layout-light/style.css}">
+  <link rel="stylesheet" th:href="@{/css/common.css}">
+  <!-- endinject -->
+  <link rel="shortcut icon" th:href="@{/images/logo.png}" />
+  <!--    CSS-->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css"
+        integrity="sha512-vKMx8UnXk60zUwyUnUPM3HbQo8QfmNx7+ltw8Pm5zLusl1XIfwcxo8DbWCqMGKaWeNxWA8yrx5v3SaVpMvR3CA=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"/>
+
+  <style type="text/css">/* Chart.js */
+  @keyframes chartjs-render-animation{from{opacity:.99}to{opacity:1}}.chartjs-render-monitor{animation:chartjs-render-animation 1ms}.chartjs-size-monitor,.chartjs-size-monitor-expand,.chartjs-size-monitor-shrink{position:absolute;direction:ltr;left:0;top:0;right:0;bottom:0;overflow:hidden;pointer-events:none;visibility:hidden;z-index:-1}.chartjs-size-monitor-expand>div{position:absolute;width:1000000px;height:1000000px;left:0;top:0}.chartjs-size-monitor-shrink>div{position:absolute;width:200%;height:200%;left:0;top:0}</style>
+</head>
+
+<body>
+<div class="container-scroller">
+  <!-- partial:partials/_navbar.html -->
+  <nav class="navbar default-layout col-lg-12 col-12 p-0 fixed-top d-flex align-items-top flex-row">
+    <div class="text-center navbar-brand-wrapper d-flex align-items-center justify-content-start">
+      <div class="me-3">
+        <button class="navbar-toggler navbar-toggler align-self-center" type="button" data-bs-toggle="minimize">
+          <span class="icon-menu"></span>
+        </button>
+      </div>
+      <div>
+        <a class="navbar-brand brand-logo" th:href="@{/products/{storeId}/overview (storeId = ${storeId})}">
+          <img th:src="@{/images/ShopMefy-removebg-preview.png}" alt="logo" />
+        </a>
+        <a class="navbar-brand brand-logo-mini" href="index.html">
+          <img th:src="@{/images/logo.png}" alt="logo" />
+        </a>
+      </div>
+    </div>
+    <div class="navbar-menu-wrapper d-flex align-items-top">
+      <ul class="navbar-nav">
+        <li class="nav-item font-weight-semibold d-none d-lg-block ms-0">
+          <h1 class="welcome-text">Xin chào, <span class="text-black fw-bold" th:text="${userInfo.fullName}"></span></h1>
+        </li>
+      </ul>
+      <ul class="navbar-nav ms-auto">
+        <a th:href="@{/sale/{storeId} (storeId = ${storeId})}" class="btn btn-sale">
+          <i class="ti ti-shopping-cart"></i>
+          Bán hàng
+        </a>
+
+        <li class="nav-item">
+          <form class="search-form" action="#">
+            <i class="icon-search"></i>
+            <input type="search" class="form-control" placeholder="Search Here" title="Search here">
+          </form>
+        </li>
+        <li class="nav-item dropdown">
+          <a class="nav-link count-indicator" id="notificationDropdown" href="#" data-bs-toggle="dropdown">
+            <i class="icon-mail icon-lg"></i>
+          </a>
+          <div class="dropdown-menu dropdown-menu-right navbar-dropdown preview-list pb-0" aria-labelledby="notificationDropdown">
+            <a class="dropdown-item py-3 border-bottom">
+              <p class="mb-0 font-weight-medium float-left">You have 4 new notifications </p>
+              <span class="badge badge-pill badge-primary float-right">View all</span>
+            </a>
+            <a class="dropdown-item preview-item py-3">
+              <div class="preview-thumbnail">
+                <i class="mdi mdi-alert m-auto text-primary"></i>
+              </div>
+              <div class="preview-item-content">
+                <h6 class="preview-subject fw-normal text-dark mb-1">Application Error</h6>
+                <p class="fw-light small-text mb-0"> Just now </p>
+              </div>
+            </a>
+            <a class="dropdown-item preview-item py-3">
+              <div class="preview-thumbnail">
+                <i class="mdi mdi-settings m-auto text-primary"></i>
+              </div>
+              <div class="preview-item-content">
+                <h6 class="preview-subject fw-normal text-dark mb-1">Settings</h6>
+                <p class="fw-light small-text mb-0"> Private message </p>
+              </div>
+            </a>
+            <a class="dropdown-item preview-item py-3">
+              <div class="preview-thumbnail">
+                <i class="mdi mdi-airballoon m-auto text-primary"></i>
+              </div>
+              <div class="preview-item-content">
+                <h6 class="preview-subject fw-normal text-dark mb-1">New user registration</h6>
+                <p class="fw-light small-text mb-0"> 2 days ago </p>
+              </div>
+            </a>
+          </div>
+        </li>
+        <li class="nav-item dropdown">
+          <a class="nav-link count-indicator" id="countDropdown" href="#" data-bs-toggle="dropdown" aria-expanded="false">
+            <i class="icon-bell"></i>
+            <span class="count"></span>
+          </a>
+          <div class="dropdown-menu dropdown-menu-right navbar-dropdown preview-list pb-0" aria-labelledby="countDropdown">
+            <a class="dropdown-item py-3">
+              <p class="mb-0 font-weight-medium float-left">You have 7 unread mails </p>
+              <span class="badge badge-pill badge-primary float-right">View all</span>
+            </a>
+            <div class="dropdown-divider"></div>
+            <a class="dropdown-item preview-item">
+              <div class="preview-thumbnail">
+                <img th:src="@{/images/faces/face10.jpg}" alt="image" class="img-sm profile-pic">
+              </div>
+              <div class="preview-item-content flex-grow py-2">
+                <p class="preview-subject ellipsis font-weight-medium text-dark">Marian Garner </p>
+                <p class="fw-light small-text mb-0"> The meeting is cancelled </p>
+              </div>
+            </a>
+            <a class="dropdown-item preview-item">
+              <div class="preview-thumbnail">
+                <img th:src="@{/images/faces/face12.jpg}" alt="image" class="img-sm profile-pic">
+              </div>
+              <div class="preview-item-content flex-grow py-2">
+                <p class="preview-subject ellipsis font-weight-medium text-dark">David Grey </p>
+                <p class="fw-light small-text mb-0"> The meeting is cancelled </p>
+              </div>
+            </a>
+            <a class="dropdown-item preview-item">
+              <div class="preview-thumbnail">
+                <img th:src="@{/images/faces/face1.jpg}" alt="image" class="img-sm profile-pic">
+              </div>
+              <div class="preview-item-content flex-grow py-2">
+                <p class="preview-subject ellipsis font-weight-medium text-dark">Travis Jenkins </p>
+                <p class="fw-light small-text mb-0"> The meeting is cancelled </p>
+              </div>
+            </a>
+          </div>
+        </li>
+        <li class="nav-item dropdown d-none d-lg-block user-dropdown">
+          <a class="nav-link" id="UserDropdown" href="#" data-bs-toggle="dropdown" aria-expanded="false">
+            <img class="img-xs rounded-circle" th:src="@{${userInfo.avatar != null ? 'http://localhost:8080/' + userInfo.avatar.id :'http://localhost:8080/images/default-avatar.jpg'}}" alt="Profile image"> </a>
+          <div class="dropdown-menu dropdown-menu-right navbar-dropdown" aria-labelledby="UserDropdown">
+            <div class="dropdown-header text-center">
+              <img class="img-md rounded-circle" th:src="@{${userInfo.avatar != null ? 'http://localhost:8080/' + userInfo.avatar.id :'http://localhost:8080/images/default-avatar.jpg'}}" alt="Profile image" style="width: 50px; height: 50px">
+              <p id="userId" class="mb-1 mt-3 font-weight-semibold" th:data-user-id="${userInfo.id}" th:text="${#authentication.name}">Allen Moreno</p>
+              <p class="fw-light text-muted mb-0" th:text="${userInfo.email}">allenmoreno@gmail.com</p>
+            </div>
+            <a id="info-detail" class="dropdown-item"><i class="dropdown-item-icon mdi mdi-account-outline text-primary me-2"></i> Thông tin của tôi <span class="badge badge-pill badge-danger">1</span></a>
+            <a class="dropdown-item"><i class="dropdown-item-icon mdi mdi-message-text-outline text-primary me-2"></i> Tin nhắn</a>
+            <a class="dropdown-item"><i class="dropdown-item-icon mdi mdi-calendar-check-outline text-primary me-2"></i> Hoạt động</a>
+            <a class="dropdown-item"><i class="dropdown-item-icon mdi mdi-help-circle-outline text-primary me-2"></i> FAQ</a>
+            <a class="dropdown-item" th:href="@{/logout}"><i class="dropdown-item-icon mdi mdi-power text-primary me-2"></i>Đăng xuất</a>
+          </div>
+        </li>
+      </ul>
+      <button class="navbar-toggler navbar-toggler-right d-lg-none align-self-center" type="button" data-bs-toggle="offcanvas">
+        <span class="mdi mdi-menu"></span>
+      </button>
+    </div>
+  </nav>
+  <!-- partial -->
+  <div class="container-fluid page-body-wrapper">
+    <!-- partial:partials/_settings-panel.html -->
+    <div class="theme-setting-wrapper">
+      <div id="settings-trigger"><i class="ti-settings"></i></div>
+      <div id="theme-settings" class="settings-panel">
+        <i class="settings-close ti-close"></i>
+        <p class="settings-heading">SIDEBAR SKINS</p>
+        <div class="sidebar-bg-options selected" id="sidebar-light-theme"><div class="img-ss rounded-circle bg-light border me-3"></div>Light</div>
+        <div class="sidebar-bg-options" id="sidebar-dark-theme"><div class="img-ss rounded-circle bg-dark border me-3"></div>Dark</div>
+        <p class="settings-heading mt-2">HEADER SKINS</p>
+        <div class="color-tiles mx-0 px-4">
+          <div class="tiles success"></div>
+          <div class="tiles warning"></div>
+          <div class="tiles danger"></div>
+          <div class="tiles info"></div>
+          <div class="tiles dark"></div>
+          <div class="tiles default"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- partial -->
+    <!-- partial:partials/_sidebar.html -->
+    <nav class="sidebar sidebar-offcanvas" id="sidebar">
+      <ul class="nav">
+      <li class="nav-item main-category">
+        <a class="nav-link" th:href="@{/products/{storeId}/overview (storeId = ${storeId})}">
+          <i class="mdi mdi-grid-large menu-icon"></i>
+          <span class="menu-title">Tổng quan</span>
+        </a>
+      </li>
+      <li class="nav-item nav-category">Quản lý cửa hàng</li>
+      <li class="nav-item main-category">
+        <a class="nav-link" data-bs-toggle="collapse" th:href="@{#products}" aria-expanded="false" aria-controls="ui-basic">
+          <i class="menu-icon mdi mdi mdi-archive"></i>
+          <span class="menu-title">Hàng hoá</span>
+          <i class="menu-arrow"></i>
+        </a>
+        <div class="collapse" id="products">
+          <ul class="nav flex-column sub-menu">
+            <li class="nav-item"> <a class="nav-link" th:href="@{/products/{storeId}/inventory (storeId = ${storeId})}">Quản lý tồn kho</a></li>
+            <li class="nav-item"> <a class="nav-link" th:href="@{/products/{storeId}/stock-card (storeId = ${storeId})}">Thẻ kho</a></li>
+            <li class="nav-item"> <a class="nav-link" th:href="@{/order/{storeId}/order-history (storeId = ${storeId})}">Lịch sử bán hàng</a></li>
+            <li class="nav-item"> <a class="nav-link" th:href="@{/order/{storeId}/return (storeId = ${storeId})}">Trả hàng</a></li>
+            <li class="nav-item"> <a class="nav-link" th:href="@{/inventory/{storeId}/check-stock (storeId = ${storeId})}">Kiểm hàng</a></li>
+            <li class="nav-item"> <a class="nav-link" th:href="@{/inventory/{storeId}/check-stock/history (storeId = ${storeId})}">Lịch sử kiểm hàng</a></li>
+          </ul>
+        </div>
+      </li>
+      <li class="nav-item main-category">
+        <a class="nav-link" data-bs-toggle="collapse" th:href="@{#staff}" aria-expanded="false" aria-controls="ui-basic">
+          <i class="menu-icon mdi mdi mdi-account-multiple"></i>
+          <span class="menu-title">Nhân viên của tôi</span>
+          <i class="menu-arrow"></i>
+        </a>
+        <div class="collapse" id="staff">
+          <ul class="nav flex-column sub-menu">
+            <li class="nav-item"> <a class="nav-link" th:href="@{/staff/{storeId} (storeId = ${storeId})}">Xem thông tin</a></li>
+            <li class="nav-item"> <a class="nav-link" th:href="@{/staff/{storeId}/timetable (storeId = ${storeId})}">Lịch làm việc</a></li>
+            <li class="nav-item"> <a class="nav-link" th:href="@{/staff/{storeId}/timekeeping (storeId = ${storeId})}">Chấm công</a></li>
+            <li class="nav-item"> <a class="nav-link" th:href="@{/staff/{storeId}/salary (storeId = ${storeId})}">Tính lương</a></li>
+          </ul>
+        </div>
+      </li>
+      <li class="nav-item main-category">
+        <a class="nav-link" data-bs-toggle="collapse" th:href="@{#form-elements}" aria-expanded="false" aria-controls="form-elements">
+          <i class="menu-icon mdi mdi mdi-account-switch"></i>
+          <span class="menu-title">Đối tác</span>
+          <i class="menu-arrow"></i>
+        </a>
+        <div class="collapse" id="form-elements">
+          <ul class="nav flex-column sub-menu">
+            <li class="nav-item"><a class="nav-link" th:href="@{/client/{storeId} (storeId = ${storeId})}">Khách hàng</a></li>
+            <li class="nav-item"><a class="nav-link" th:href="@{/supplier/{storeId}/supplier-info (storeId = ${storeId})}">Nhà cung cấp</a></li>
+          </ul>
+        </div>
+      </li>
+      <li class="nav-item nav-category">Chương trình khuyến mãi</li>
+      <li class="nav-item main-category">
+        <a class="nav-link" data-bs-toggle="collapse" th:href="@{#campaign}" aria-expanded="false" aria-controls="ui-basic">
+          <i class="menu-icon mdi mdi mdi-account-multiple"></i>
+          <span class="menu-title">Chiến dịch</span>
+          <i class="menu-arrow"></i>
+        </a>
+        <div class="collapse" id="campaign">
+          <ul class="nav flex-column sub-menu">
+            <li class="nav-item"> <a class="nav-link" th:href="@{/campaign/{storeId}/create-page (storeId = ${storeId})}">Tạo mới chiến dịch</a></li>
+            <li class="nav-item"> <a class="nav-link" th:href="@{/campaign/{storeId}/all-campaign (storeId = ${storeId})}">Tất cả chiến dịch</a></li>
+            <li class="nav-item"> <a class="nav-link" th:href="@{/campaign/{storeId}/active (storeId = ${storeId})}">Đang chạy</a></li>
+            <li class="nav-item"> <a class="nav-link" th:href="@{/campaign/{storeId}/expired (storeId = ${storeId})}">Đã hoàn thành</a></li>
+          </ul>
+        </div>
+      </li>
+        <li class="nav-item main-category">
+          <a class="nav-link" data-bs-toggle="collapse" th:href="@{#voucher}" aria-expanded="false" aria-controls="ui-basic">
+            <i class="menu-icon mdi mdi mdi-account-multiple"></i>
+            <span class="menu-title">Voucher</span>
+            <i class="menu-arrow"></i>
+          </a>
+          <div class="collapse" id="voucher">
+            <ul class="nav flex-column sub-menu">
+              <li class="nav-item"> <a class="nav-link" th:href="@{/voucher/{storeId}/create-page (storeId = ${storeId})}">Tạo mã voucher</a></li>
+              <li class="nav-item"> <a class="nav-link" th:href="@{/voucher/{storeId}/all-voucher (storeId = ${storeId})}">Tất cả voucher</a></li>
+              <li class="nav-item"> <a class="nav-link" th:href="@{/voucher/{storeId}/active (storeId = ${storeId})}">Đang hoạt động</a></li>
+              <li class="nav-item"> <a class="nav-link" th:href="@{/voucher/{storeId}/expired (storeId = ${storeId})}">Đã hết hạn</a></li>
+            </ul>
+          </div>
+        </li>
+      <li class="nav-item nav-category">Báo cáo</li>z
+      <li class="nav-item main-category">
+        <a class="nav-link" data-bs-toggle="collapse" href="#auth" aria-expanded="false" aria-controls="auth">
+          <i class="menu-icon mdi mdi mdi-animation"></i>
+          <span class="menu-title ">Báo cáo cuối ngày</span>
+        </a>
+      </li>
+      <li class="nav-item main-category">
+        <a class="nav-link" data-bs-toggle="collapse" href="#auth" aria-expanded="false" aria-controls="auth">
+          <i class="menu-icon mdi mdi mdi-arrange-send-backward"></i>
+          <span class="menu-title">Báo cáo cuối tuần</span>
+        </a>
+      </li>
+      <li class="nav-item main-category">
+        <a class="nav-link" data-bs-toggle="collapse" href="#auth" aria-expanded="false" aria-controls="auth">
+          <i class="menu-icon mdi mdi mdi-arrange-send-to-back"></i>
+          <span class="menu-title">Báo cáo cuối tháng</span>
+        </a>
+      </li>
+      <li class="nav-item nav-category">help</li>
+
+    </ul>
+    </nav>
+    <!-- partial -->
+    <!--    CONTENT-->
+    <div class="main-panel">
+      <th:block th:replace="${content} ?: ~{}"></th:block>
+
+<!--       modal detail user-->
+      <div class="modal fade" id="userLoginDetail" tabindex="-1" aria-labelledby="userLoginDetailLabel"
+           aria-hidden="true" data-bs-backdrop="static">
+        <div class="modal-dialog modal-lg">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="userLoginDetailLabel">Thông tin của tôi</h5>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+              <div class="container-xl px-4 mt-4">
+                <div class="row">
+                  <div class="col-xl-4">
+                    <!-- Profile picture card-->
+                    <div class="card mb-4 mb-xl-0">
+                      <div class="card-header">Avatar</div>
+                      <div class="card-body text-center">
+                        <!-- Profile picture image-->
+                        <img class="img-account-update rounded-circle mb-2" th:src="@{${userInfo.avatar != null ? 'http://localhost:8080/' + userInfo.avatar.id :'http://localhost:8080/images/default-avatar.jpg'}}"  alt="" style="width: 200px; height: 200px">
+                        <!-- Profile picture help block-->
+                        <div class="small font-italic text-muted mb-4">JPG or PNG no larger than 5 MB</div>
+                        <!-- Profile picture upload button-->
+                        <button id="image-user-update"  onclick="document.getElementById('imageUserUpdate').click()" class="btn btn-primary" type="button">Tải ảnh mới
+                          <input type="file" id="imageUserUpdate" style="display: none;" />
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-xl-8">
+                    <!-- Account details card-->
+                    <div class="card mb-4">
+                      <div class="card-header">Thông tin cá nhân</div>
+                      <div id="staff-${staffDetail.id}" class="card-body">
+                        <div class="row gx-3 mb-3">
+                          <div class="col-md-6">
+                            <label class="small mb-1" for="fullName">Họ và tên</label>
+                            <input class="form-control" id="fullName" type="text" placeholder="Nhập họ và tên" th:value="${userInfo.fullName}">
+                          </div>
+                          <div class="col-md-6">
+                            <label class="small mb-1" for="username">Tên đăng nhập</label>
+                            <input class="form-control" id="username" type="text" placeholder="Nhập tên đăng nhập" th:value="${userInfo.username}">
+                          </div>
+                        </div>
+                        <div class="mb-3">
+                          <label class="small mb-1" for="address">Địa chỉ</label>
+                          <input class="form-control" id="address" type="text" placeholder="Nhập địa chỉ" th:value="${userInfo.address}">
+                        </div>
+                        <div class="row gx-3 mb-3">
+                          <div class="col-md-6">
+                            <label class="small mb-1" for="email">Email</label>
+                            <input class="form-control" id="email" type="email" placeholder="Nhập email" th:value="${userInfo.email}">
+                          </div>
+                          <div class="col-md-6">
+                            <label class="small mb-1" for="phone">Số điện thoại</label>
+                            <input class="form-control" id="phone" type="tel" placeholder="Nhập số điện thoại" th:value="${userInfo.phone}">
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="modal-footer">
+              <button id="btn-update" class="btn btn-primary float-end" type="button" >Lưu thay đổi</button>
+              <button id="btn-change-password" class="btn btn-primary float-end" type="button" >Đổi mật khẩu</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+
+  <!-- partial:partials/_footer.html -->
+      <footer class="footer">
+        <div class="d-sm-flex justify-content-center justify-content-sm-between">
+          <span class="text-muted text-center text-sm-left d-block d-sm-inline-block"></span>
+          <span class="float-none float-sm-right d-block mt-1 mt-sm-0 text-center">Copyright © 2023. All rights reserved.</span>
+        </div>
+      </footer>
+    </div>
+  <!-- partial -->
+  </div>
+  <!-- page-body-wrapper ends -->
+</div>
+<!-- container-scroller -->
+
+<!-- plugins:js -->
+
+<script th:src="@{/vendors/js/vendor.bundle.base.js}"></script>
+
+<script th:src="@{/js/off-canvas.js}"></script>
+<script th:src="@{/js/hoverable-collapse.js}"></script>
+<script th:src="@{/js/template.js}"></script>
+<script th:src="@{/js/settings.js}"></script>
+<script th:src="@{/js/dashboard.js}"></script>
+
+<script th:src="@{/vendors/js/jquery.cookie.js}"></script>
+
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"
+        integrity="sha512-VEd+nq25CkR676O+pLBnDW09R7VQX9Mdiij052gVCp5yVH3jGtH70Ho/UUv4mJDsEdTvqRCFZg0NKGiojGnUCw=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script
+        src="https://code.jquery.com/jquery-3.7.0.min.js"
+        integrity="sha256-2Pmvv0kuTBOenSvLm6bvfBSSHrUJ+3A7x6P5Ebd07/g="
+        crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.5/jquery.validate.min.js" integrity="sha512-rstIgDs0xPgmG6RX1Aba4KV5cWJbAMcvRCVmglpam9SoHZiUCyQVDdH2LPlxoHtrv17XWblE/V/PP+Tr04hbtA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.5/additional-methods.min.js" integrity="sha512-6S5LYNn3ZJCIm0f9L6BCerqFlQ4f5MwNKq+EthDXabtaJvg3TuFLhpno9pcm+5Ynm6jdA9xfpQoMz2fcjVMk9g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script th:src="@{/js/common/custom.js}"> </script>
+<script th:inline="javascript">
+</script>
+
+<th:block th:replace="${js} ?: ~{}"></th:block>
+</body>
+
+</html>

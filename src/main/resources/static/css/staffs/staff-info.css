@@ -1,0 +1,47 @@
+.img-account-profile {
+    width: 200px;
+    height: 200px;
+    object-fit: cover;
+}
+
+.img-account-profile-update {
+    width: 200px;
+    height: 200px;
+    object-fit: cover;
+}
+
+.search {
+    display: flex;
+    position: relative;
+    width: 40%;
+}
+
+.search-product {
+    display: flex;
+    position: relative;
+    right: -35px;
+    align-items: center;
+    width: 28px;
+}
+
+#searchInput {
+    padding-left: 32px;
+}
+
+.card-header {
+    border-radius: calc(0.25rem + 16px) calc(0.25rem + 16px) 0 0 !important;
+}
+
+.ti-plus {
+    font-size: 14px;
+    margin-right: 5px;
+}
+
+.modal input {
+    padding: 0.875rem 0.5rem!important;
+}
+
+
+#confirmModal {
+    z-index: 2000;
+}

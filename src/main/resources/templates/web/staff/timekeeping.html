@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="https://www.thymeleaf.org"
+      th:replace="~{layout/layout.html :: main-fragment(~{:: title}, ~{:: .css}, ~{:: .content-wrapper}, ~{:: .js})}"
+      xmlns="http://www.w3.org/1999/html">
+
+<head>
+  <title>Nhân viên - ShopMefy</title>
+
+  <th:block class="css">
+    <link rel="stylesheet" th:href="@{/css/staffs/timekeeping.css}">
+  </th:block>
+
+</head>
+<body>
+<div class="content-wrapper">
+    <div class="container">
+      <div class="card">
+        <div class="card-body">
+          <div class="table-container">
+            <div class="timetable-img text-center">
+              <h4 class="mb-3">Bảng chấm công</h4>
+            </div>
+            <table class="table table-bordered text-center">
+          <thead>
+          <tr class="bg-light-gray">
+            <th class="text-uppercase">Thời gian
+            </th>
+            <th class="text-uppercase" th:data-work-day="${dayOfWeek[0]}" th:data-index="1">Thứ hai
+              <div>12/8</div>
+            </th>
+            <th class="text-uppercase" th:data-work-day="${dayOfWeek[1]}" th:data-index="2">Thứ ba
+              <div>12/8</div></th>
+            <th class="text-uppercase" th:data-work-day="${dayOfWeek[2]}" th:data-index="3">Thứ tư
+              <div>12/8</div></th>
+            <th class="text-uppercase" th:data-work-day="${dayOfWeek[3]}" th:data-index="4">Thứ năm
+              <div>12/8</div></th>
+            <th class="text-uppercase" th:data-work-day="${dayOfWeek[4]}" th:data-index="5">Thứ sáu
+              <div>12/8</div></th>
+            <th class="text-uppercase" th:data-work-day="${dayOfWeek[5]}" th:data-index="6">Thứ bảy
+              <div>12/8</div></th>
+            <th class="text-uppercase" th:data-work-day="${dayOfWeek[6]}" th:data-index="0">Chủ nhật
+              <div>12/8</div></th>
+          </tr>
+          </thead>
+          <tbody>
+            <th:block th:each="workShift, iterStat: ${workShiftList}">
+              <tr class="work-shift " th:data-work-shift-id="${workShift.id}" style="height: 85px" th:data-start-shift="${workShift.startShift}" th:data-end-shift="${workShift.endShift}">
+                <td class="" >
+                  <div class="text-uppercase fw-bolder text-center mb-1" th:text="${workShift.name}"></div>
+                  <div><span th:text="${workShift.startShift}"></span><span>-</span><span th:text="${workShift.endShift}"></span> </div>
+                </td>
+                <th:block th:if="${shiftAssignmentList != null and !#lists.isEmpty(shiftAssignmentList)}" th:each="shiftAssignment : ${shiftAssignmentList}" >
+                  <td th:if="${shiftAssignment.workShiftId == workShift.id}" th:data-shift-assignment-id="${shiftAssignment.id}"
+                      th:data-check-in-time="${shiftAssignment.checkInTime != null ? shiftAssignment.checkInTime : ''}"
+                      th:data-check-out-time="${shiftAssignment.checkOutTime != null ? shiftAssignment.checkOutTime : ''}">
+                    <th:block th:if="${shiftAssignment.staffNames != null and !#lists.isEmpty(shiftAssignment.staffNames)}">
+                      <div th:class="${shiftAssignment.staffNames != null and shiftAssignment.staffNames[0] == userInfo.fullName ? 'shift user-shift' : 'shift'}" th:text="${shiftAssignment.staffNames[0]}">
+                      </div>
+                      <th:block th:if="${shiftAssignment.checkInTime != null}">
+                        <div style="margin-top: 5px" th:text="${'Đã check in lúc: ' + shiftAssignment.checkInTime}"></div>
+                      </th:block>
+                      <th:block th:if="${shiftAssignment.checkOutTime != null}">
+                        <div style="margin-top: 5px" th:text="${'Đã check out lúc: ' + shiftAssignment.checkOutTime}"></div>
+                      </th:block>
+                    </th:block>
+                    <th:block th:unless="${shiftAssignment.staffNames != null and !#lists.isEmpty(shiftAssignment.staffNames)}">
+                      <div>Chưa phân ca</div>
+                    </th:block>
+                  </td>
+                </th:block>
+                <th:block th:unless="${shiftAssignmentList != null and !#lists.isEmpty(shiftAssignmentList)}">
+                  <td>
+                    <div>Chưa phân ca</div>
+                  </td>
+                </th:block>
+              </tr>
+            </th:block>
+          </tbody>
+        </table>
+      </div>
+        </div>
+      </div>
+      <div class="card-description">
+        <div>
+          <div style="background-color: rgb(184, 230, 182); width: 40px; height: 30px"></div>
+          <span>: Ca làm việc hiện tại</span>
+        </div>
+        <div th:if="${userInfo.fullName != ownerName}">
+          <div style="background-color: #0263ee; width: 40px; height: 30px"></div>
+          <span >: Ca làm việc của bạn</span>
+        </div>
+      </div>
+    </div>
+
+<!--  Modal check-in-->
+  <div class="modal" id="checkInModal">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Check In</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <h4>Hệ thống đã gửi cho bạn 1 mã check-in vào email đăng ký, vui lòng kiểm tra email và xác nhận</h4>
+          <span>Nhập mã xác nhận: </span>
+          <input id="input-check-in-token" class="form-control" type="text">
+        </div>
+        <div class="modal-footer">
+          <button id="confirm-check-in" type="button" class="btn btn-primary" data-bs-dismiss="modal">Xác nhận</button>
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+
+
+
+
+
+<!-- content-wrapper ends -->
+<th:block class="js">
+  <!-- endinject -->
+  <!-- Plugin js for this page -->
+
+  <!-- endinject -->
+  <!-- Custom js for this page-->
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
+  <!-- End custom js for this page-->
+  <script th:inline="javascript">
+    const staffList = /*[[${staffList}]]*/ [];
+    let workShiftList = /*[[${workShiftList}]]*/ [];
+    console.log(workShiftList)
+    let shiftAssignmentList = /*[[${shiftAssignmentList}]]*/ [];
+    let dayOfWeek = /*[[${dayOfWeek}]]*/ [];
+    let userName = /*[[${userName}]]*/ [];
+    let ownerName = /*[[${ownerName}]]*/ [];
+    console.log(userName)
+    console.log(ownerName)
+  </script>
+  <script th:src="@{/js/staff/timekeeping.js}"></script>
+</th:block>
+
+</body>
+
+</html>

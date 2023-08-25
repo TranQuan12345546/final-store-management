@@ -1,0 +1,63 @@
+td {
+    max-width: 120px;
+}
+
+.shift {
+    height: 26px;
+    font-size: 13px;
+    border-radius: 5px;
+    margin: auto;
+    max-width: 100px;
+    line-height: 26px;
+    border: 1px solid rgb(118, 118, 118);
+}
+
+.user-shift {
+    background-color: #0263ee;
+    color: #fff;
+}
+
+#datePicker {
+    border: 1px solid #ccc;
+    padding: 5px;
+    border-radius: 4px
+}
+
+#check-in {
+    display: none;
+    border: 1px solid;
+    margin: 5px auto auto;
+    border-radius: 5px;
+    background: bisque;
+}
+
+td:hover #check-in {
+    display: block;
+}
+
+#check-out {
+    display: none;
+    border: 1px solid;
+    margin: 5px auto auto;
+    border-radius: 5px;
+    background: bisque;
+}
+
+td:hover #check-out {
+    display: block;
+}
+
+.card-description {
+    display: flex;
+    justify-content: center;
+    margin-top: 50px;
+    margin-left: 20px;
+    flex-direction: column;
+}
+
+.card-description div {
+    display: flex;
+    align-items: center;
+    margin-right: 10px;
+    margin-bottom: 10px;
+}

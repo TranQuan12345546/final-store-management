@@ -1,0 +1,70 @@
+.content-wrapper {
+    padding: 20px;
+}
+
+.card {
+    border: none;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.header {
+    margin-bottom: 20px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #e9ecef;
+}
+
+.col-md-3 h3 {
+    display: inline;
+    font-size: 20px;
+    font-weight: bold;
+}
+
+#report-range {
+    background-color: transparent;
+    cursor: pointer;
+    padding: 5px 10px;
+    display: inline-block;
+}
+
+#report-range i {
+    margin-right: 5px;
+}
+
+.table-container {
+    margin-top: 20px;
+}
+
+.table {
+    font-size: 14px;
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.table th {
+    padding-top: 25px !important;
+    vertical-align: middle;
+}
+
+.table thead tr {
+    background-color: antiquewhite;
+}
+
+.table tbody tr {
+    background-color: aliceblue;
+}
+
+.table tbody tr td input{
+    width: 100px;
+    outline: none;
+    border: none;
+}
+
+#change-hourly-salary {
+    border-radius: 5px;
+}
+
+#hourly-salary:focus {
+    outline: none;
+    border: 2px solid #3498db;
+}
+

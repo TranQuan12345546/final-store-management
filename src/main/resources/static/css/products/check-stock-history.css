@@ -1,0 +1,125 @@
+.card-box {
+    position: relative;
+    height: 10em;
+    color: #fff;
+    padding: 12px 10px 40px;
+    margin: 20px 0px;
+    border-radius: 0.75em;
+}
+.card-box:hover {
+    text-decoration: none;
+    color: #f1f1f1;
+
+}
+
+.card-box .inner {
+    padding: 5px 10px 0 10px;
+}
+
+.card-box h3 {
+    font-size: 27px;
+    font-weight: bold;
+    margin: 0 0 8px 0;
+    white-space: nowrap;
+    padding: 0;
+    text-align: left;
+}
+
+.card-box p {
+    font-size: 15px;
+}
+
+.card-box .icon {
+    position: absolute;
+    top: auto;
+    bottom: 5px;
+    right: 5px;
+    z-index: 0;
+    font-size: 72px;
+    color: rgba(0, 0, 0, 0.15);
+}
+
+.icon img {
+    width: 1em;
+    height: 1em;
+    border-radius: 5px;
+}
+
+.card-box .history-detail-btn {
+    position: absolute;
+    left: 0px;
+    bottom: 0px;
+    text-align: center;
+    padding: 3px 0;
+    border: none;
+    color: rgba(255, 255, 255, 0.8);
+    background: rgba(0, 0, 0, 0.1);
+    border-bottom-left-radius: 0.75em;
+    border-bottom-right-radius: 0.75em;
+    width: 100%;
+    text-decoration: none;
+}
+
+.card-box:hover .history-detail-btn {
+    background: rgba(0, 0, 0, 0.3);
+}
+
+.search {
+    display: flex;
+    position: relative;
+    width: 40%;
+}
+
+.search-product {
+    display: flex;
+    position: relative;
+    right: -35px;
+    align-items: center;
+    width: 28px;
+}
+
+#searchInput {
+    padding-left: 32px;
+}
+
+#searchInput2 {
+    padding-left: 32px;
+}
+
+.input-quantity {
+    width: 30px;
+}
+
+.high-light {
+    background-color: yellow;
+}
+
+
+.bg-blue {
+    background-color: #00c0ef !important;
+}
+
+.bg-green {
+    background-color: #00a65a !important;
+}
+
+.bg-orange {
+    background-color: #f39c12 !important;
+}
+
+.bg-red {
+    background-color: #d9534f !important;
+}
+
+.daterangepicker .ranges li.active {
+    background-color: #1f3bb3 !important;
+}
+
+.content {
+    flex-wrap: wrap;
+}
+
+.history-container {
+    width: 24%;
+    margin: 5px;
+}

@@ -1,0 +1,31 @@
+.custom-scrollbar::-webkit-scrollbar {
+    width: 5px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+    background-color: #f1f1f1;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+    background-color: #a9a9a9;
+    border-radius: 4px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+    background-color: #555;
+}
+
+input.form-control {
+    padding: 0.875rem 0.375rem;
+}
+
+.daterangepicker td.disabled, .daterangepicker option.disabled {
+    text-decoration: none;
+}
+
+.error {
+    margin-top: 5px;
+    color: red;
+    font-style: italic;
+}
+

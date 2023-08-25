@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Check In </title>
+    <style>
+        p {
+            font-size: 14px;
+            color: #333;
+        }
+
+        span {
+            font-weight: bold;
+            color: #007bff;
+        }
+    </style>
+</head>
+<body>
+<p>Xin chào <span th:text="${name}"></span>,</p>
+<p style="font-style: italic;">Bạn đang tiến hành check-in cho ca làm việc của mình.</p>
+<p style="font-style: italic;">Nếu bạn không làm điều đó, hãy bỏ qua email này.</p>
+<p>Nếu có, đây là mã xác nhận của bạn : <span th:text="${token}"></span></p>
+<p style="font-style: italic; color: red;">Mã xác nhận này có hiệu lực trong vòng 10 phút</p>
+</body>
+</html>
