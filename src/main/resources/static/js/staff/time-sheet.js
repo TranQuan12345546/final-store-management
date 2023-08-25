@@ -664,3 +664,61 @@ $(document).ready(function () {
     }
 
 })
+
+$(document).ready(function () {
+    function updateShiftOnTime() {
+        const now = new Date();
+        const dayMapping = [8, 2, 3, 4, 5, 6, 7];
+        let day = dayMapping[now.getDay()];
+
+
+        $(".work-shift").each(function() {
+            const startShift = $(this).data("start-shift");
+            const endShift = $(this).data("end-shift");
+
+            const [startHour, startMinute] = startShift.split(":");
+            const [endHour, endMinute] = endShift.split(":");
+
+            const startTime = new Date(now.getFullYear(), now.getMonth(), now.getDate(), startHour, startMinute);
+            const endTime = new Date(now.getFullYear(), now.getMonth(), now.getDate(), endHour, endMinute);
+
+            if (now > startTime && now < endTime) {
+                const shiftChecked = $(this).find(`td:nth-child(${day})`);
+                if (shiftChecked.data('checked') === undefined) {
+                    $('td').css('background-color', 'transparent');
+                    $('td:has(button)').find('button').remove();
+                    shiftChecked.data('checked', 'checked')
+                    shiftChecked.css("background-color", "#b8e6b6");
+                    let checkInTime = shiftChecked.data('check-in-time');
+                    let checkOutTime = shiftChecked.data('check-out-time');
+                    if (ownerName !== userName) {
+                        if (checkInTime == null ) {
+                            const button =  `<button id="check-in" >check-in</button>`;
+                            shiftChecked.append(button)
+                        } else if (checkInTime != null && checkOutTime == null) {
+                            let checkoutButton = `<button id="check-out" >check-out</button>`;
+                            shiftChecked.append(checkoutButton);
+                        }
+                    }
+                }
+            }
+        });
+    }
+
+    function calculateTimeToNextMinute() {
+        const now = new Date();
+        const secondsToNextMinute = 60 - now.getSeconds();
+        return secondsToNextMinute * 1000;
+    }
+
+    function updateShiftColorsAtNextMinute() {
+        const timeToNextMinute = calculateTimeToNextMinute();
+        setTimeout(function() {
+            updateShiftOnTime();
+            // Sau khi gọi hàm updateShiftColors, tiếp tục lập lịch cho phút tiếp theo
+            updateShiftColorsAtNextMinute();
+        }, timeToNextMinute);
+    }
+    updateShiftOnTime();
+    updateShiftColorsAtNextMinute();
+});

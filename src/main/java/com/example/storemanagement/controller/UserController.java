@@ -23,4 +23,10 @@ public class UserController {
         userService.uploadAvatar(file, userId);
         return ResponseEntity.ok("upload thành công");
     }
+
+    @GetMapping("/check-old-password/{username}")
+    public ResponseEntity<?> checkOldPassword(@PathVariable String username, @RequestParam String password) {
+        userService.checkOldPassword(password, username);
+        return ResponseEntity.ok("Trùng khớp");
+    }
 }

@@ -93,8 +93,8 @@ class StoreManagementApplicationTests {
 
 	@Test
 	void save_users() {
-//		Role ownerRole = roleRepository.findByName("OWNER").orElse(null);
-//		Role adminRole = roleRepository.findByName("ADMIN").orElse(null);
+		Role ownerRole = roleRepository.findByName("OWNER").orElse(null);
+		Role adminRole = roleRepository.findByName("ADMIN").orElse(null);
 		Role staffRole = roleRepository.findByName("STAFF").orElse(null);
 
 

@@ -84,4 +84,35 @@ $(document).ready(function () {
         });
 
     })
+
+    $('#btn-change-password').on('click', async function () {
+        $('#changePasswordModal').modal('show')
+    })
+
+    $('#old-password').on('blur', function () {
+        console.log($(this).val())
+        handleOldPassword($(this).val());
+    })
+
+    $('#old-password').on('keydown', function (event) {
+        if (event.which === 13) {
+            handleOldPassword($(this).val());
+        }
+    });
+
+    function handleOldPassword(oldPass) {
+        let username = $('#username').val();
+        fetch('/check-old-password/' + username +'?password=' + oldPass, {
+            method: 'GET'
+        })
+            .then(response => {
+                if (!response.ok) {
+                    toastr.error("Mật khẩu cũ không đúng.")
+                }
+                else {
+                    $('#send-request').attr('disabled', false)
+                }
+            })
+    }
+
 })

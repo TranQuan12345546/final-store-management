@@ -379,6 +379,27 @@
         </div>
       </div>
 
+<!--      modal đổi mật khẩu-->
+      <div class="modal" id="changePasswordModal">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title">Đổi mật khẩu</h5>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+              <label class="my-2" >Mật khẩu cũ</label>
+              <input id="old-password" class="form-control" type="password">
+              <label  class="my-2">Mật khẩu mới</label>
+              <input id="new-password" class="form-control" type="password">
+              <label  class="my-2">Nhập lại mật khẩu mới</label>
+              <input id="re-new-password" class="form-control" type="password">
+            </div>
+            <button id="send-request" type="button" class="btn btn-secondary" disabled>Xác nhận</button>
+          </div>
+        </div>
+      </div>
+
 
   <!-- partial:partials/_footer.html -->
       <footer class="footer">

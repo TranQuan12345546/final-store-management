@@ -40,13 +40,13 @@ $(document).ready(function () {
 
             if (now > startTime && now < endTime) {
                 const shiftChecked = $(this).find(`td:nth-child(${day})`);
-                if (shiftChecked.data('checked') == undefined) {
+                if (shiftChecked.data('checked') === undefined) {
                     $('td').css('background-color', 'transparent');
                     $('td:has(button)').find('button').remove();
                     shiftChecked.data('checked', 'checked')
                     shiftChecked.css("background-color", "#b8e6b6");
                     let checkInTime = shiftChecked.data('check-in-time');
-                    let checkOutTime = shiftChecked.data('check-out-time');0
+                    let checkOutTime = shiftChecked.data('check-out-time');
                     if (ownerName !== userName) {
                         if (checkInTime == null ) {
                             const button =  `<button id="check-in" >check-in</button>`;
@@ -109,7 +109,6 @@ $(document).ready(function () {
               canClick = true;
           }, 60000);
       } else {
-          console.log("hi")
           toastr.error("Bạn không được phân công cho ca làm việc này")
       }
     })
@@ -157,23 +156,30 @@ $(document).ready(function () {
 
 $(document).ready(function () {
     $('#check-out').on('click', async function () {
-
-        let tdOnShift = $(this).closest('td');
-        let timeCheckOut = new Date().toLocaleTimeString("vi-VN", { hour12: false });
-        let shiftAssignmentId = tdOnShift.data('shift-assignment-id');
-        await fetch('/shift-assignment/' + shiftAssignmentId  + '/work-shift-check-out?checkOutTime=' + timeCheckOut, {
-            method: 'PUT'
-        })
-            .then(response => {
-                if (response.ok){
-                    let checkOutSuccessDiv = $('<div></div>').text('Đã check out lúc: ' + timeCheckOut);
-                    tdOnShift.append(checkOutSuccessDiv);
-                    tdOnShift.find('button').remove();
-                }
-                else {
-                    console.log(response);
-                }
+        let shiftName = $(this).closest('td').find('div.shift').text();
+        console.log(shiftName)
+        console.log(userName)
+        if (userName === shiftName) {
+            let tdOnShift = $(this).closest('td');
+            let timeCheckOut = new Date().toLocaleTimeString("vi-VN", { hour12: false });
+            let shiftAssignmentId = tdOnShift.data('shift-assignment-id');
+            await fetch('/shift-assignment/' + shiftAssignmentId  + '/work-shift-check-out?checkOutTime=' + timeCheckOut, {
+                method: 'PUT'
             })
+                .then(response => {
+                    if (response.ok){
+                        let checkOutSuccessDiv = $('<div></div>').text('Đã check out lúc: ' + timeCheckOut);
+                        tdOnShift.append(checkOutSuccessDiv);
+                        tdOnShift.find('button').remove();
+                    }
+                    else {
+                        console.log(response);
+                    }
+                })
+
+        } else {
+            toastr.error("Bạn không được phân công cho ca làm việc này")
+        }
 
     })
 })

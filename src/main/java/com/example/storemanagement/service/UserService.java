@@ -1,7 +1,7 @@
 package com.example.storemanagement.service;
 
-import com.example.storemanagement.enity.Staff;
 import com.example.storemanagement.enity.User;
+import com.example.storemanagement.exception.BadRequestException;
 import com.example.storemanagement.exception.NotFoundException;
 import com.example.storemanagement.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -45,5 +45,16 @@ public class UserService {
         });
         user.setAvatar(imageService.uploadAvatar(file));
         userRepository.save(user);
+    }
+
+    public void checkOldPassword(String password, String username) {
+        User user = userRepository.findByUsername(username).orElse(null);
+        if (user != null) {
+            if (!passwordEncoder.matches(password, user.getPassword())) {
+                throw new BadRequestException("Mật khẩu cũ không đúng.");
+            }
+        } else {
+            throw new NotFoundException("Không tìm thấy người dùng.");
+        }
     }
 }

@@ -45,7 +45,7 @@
             </ul>
         </div>
     </div>
-
+    <span class="username" th:text="${userInfo.fullName}"></span>
     <div id="avatar-container" th:data-user-id="${userInfo.id}">
         <img class="avatar-thumbnail" th:src="@{${userInfo.avatar != null ? 'http://localhost:8080/' + userInfo.avatar.id :'http://localhost:8080/images/default-avatar.jpg'}}">
     </div>
