@@ -130,6 +130,7 @@ public class ProductService {
         product.setInitialPrice(upsertProductRequest.getInitialPrice());
         product.setSalePrice(upsertProductRequest.getSalePrice());
         Integer userId = upsertProductRequest.getUserId();
+        System.out.println(userId);
         User user = userRepository.findById(userId).orElse(null);
         if (user != null) {
             product.setCreatedBy(user.getFullName());

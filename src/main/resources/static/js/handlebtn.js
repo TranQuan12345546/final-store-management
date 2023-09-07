@@ -89,30 +89,32 @@ $(document).ready(function () {
             // })
 
         $('#confirmCode').on('blur', async function () {
-            await checkCodeValid($('#confirmCode').val());
-        });
-
-        $('#confirmCode').on('keypress', async function (event) {
-            if (event.which === 13) {
+            try {
                 await checkCodeValid($('#confirmCode').val());
+            } catch (error) {
+                toastr.error("Đã xảy ra lỗi trong quá trình xác thực.");
+                console.error(error);
             }
         });
 
         async function checkCodeValid(code) {
-            await fetch('/resister/' + code, {
-                method: 'GET'
-            })
-                .then(async response => {
-                    if (response.ok) {
-                        toastr.success("Xác thực thành công.")
-                        isConfirm = true;
-                    } else {
-                        let message = await response.text();
-                        toastr.error(message.message);
-                    }
-                })
-        }
+            try {
+                const response = await fetch('/resister/' + code, {
+                    method: 'GET'
+                });
 
+                if (response.ok) {
+                    toastr.success("Xác thực thành công.");
+                    isConfirm = true;
+                } else {
+                    const message = await response.text();
+                    toastr.error(message);
+                }
+            } catch (error) {
+                console.error(error);
+                throw error;
+            }
+        }
 
         $('#resister-btn').on('click', async function (event) {
             event.preventDefault();

@@ -65,7 +65,7 @@ public class SecurityConfig {
                 "/change-password",
                 "/send-resister-code/**",
                 "/resister/{token}",
-                "/register",
+                "/register/**",
                 "/img/**",
                 "/swagger-ui.html",
                 "/v3/api-docs/**"

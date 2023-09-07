@@ -3,6 +3,7 @@ package com.example.storemanagement.service;
 import com.example.storemanagement.dto.projection.ProductPublic;
 import com.example.storemanagement.dto.request.UpsertProductRequest;
 import com.example.storemanagement.enity.GroupProduct;
+import com.example.storemanagement.enity.Owner;
 import com.example.storemanagement.enity.Store;
 import com.example.storemanagement.enity.Supplier;
 import com.example.storemanagement.exception.NotFoundException;
@@ -35,6 +36,8 @@ public class ExcelService {
 
     public List<UpsertProductRequest> readExcelFile(MultipartFile file, Integer storeId) throws IOException {
         List<UpsertProductRequest> products = new ArrayList<>();
+        Store store = storeRepository.findById(storeId).orElse(null);
+        Owner owner = store.getOwner();
 
         Workbook workbook = WorkbookFactory.create(file.getInputStream());
         Sheet sheet = workbook.getSheetAt(0);
@@ -46,8 +49,8 @@ public class ExcelService {
             }
 
             UpsertProductRequest product = new UpsertProductRequest();
-            if (row.getCell(1) != null) {
-                Cell cell = row.getCell(1);
+            if (row.getCell(0) != null) {
+                Cell cell = row.getCell(0);
 
                 if (cell.getCellType() == CellType.NUMERIC) {
                     double numericValue = cell.getNumericCellValue();
@@ -61,32 +64,32 @@ public class ExcelService {
                 }
             }
 
-
-            product.setName(row.getCell(2).getStringCellValue());
-            product.setInitialPrice((int) row.getCell(3).getNumericCellValue());
-            product.setSalePrice((int) row.getCell(4).getNumericCellValue());
-            product.setQuantity((int) row.getCell(5).getNumericCellValue());
-            product.setDescription(row.getCell(6).getStringCellValue());
-            product.setNote(row.getCell(7).getStringCellValue());
-            String supplierName = row.getCell(8).getStringCellValue();
+            product.setName(row.getCell(1).getStringCellValue());
+            product.setInitialPrice((int) row.getCell(2).getNumericCellValue());
+            product.setSalePrice((int) row.getCell(3).getNumericCellValue());
+            product.setQuantity((int) row.getCell(4).getNumericCellValue());
+            product.setDescription(row.getCell(5).getStringCellValue());
+            product.setNote(row.getCell(6).getStringCellValue());
+            String supplierName = row.getCell(7).getStringCellValue();
             Supplier supplier = supplierRepository.findByName(supplierName).orElseThrow(() -> {
                 throw new NotFoundException("Không tìm thấy nhà cung cấp");
             });
             product.setSupplier(supplier);
-            product.setTypeProduct(row.getCell(9).getStringCellValue());
-            String groupProductName = row.getCell(10).getStringCellValue();
+            if (row.getCell(8) != null) {
+                product.setTypeProduct(row.getCell(8).getStringCellValue());
+            }
+            String groupProductName = row.getCell(9).getStringCellValue();
             GroupProduct groupProduct = groupProductRepository.findByName(groupProductName).orElse(null);
             if (groupProduct == null) {
                 GroupProduct groupProduct1 = new GroupProduct();
                 groupProduct1.setName(groupProductName);
-                Store store = storeRepository.findById(storeId).orElse(null);
                 groupProduct1.setStore(store);
                 groupProductRepository.save(groupProduct1);
                 product.setGroupProduct(groupProduct1);
             }
             product.setGroupProduct(groupProduct);
             product.setStore(storeId);
-
+            product.setUserId(owner.getId());
             products.add(product);
         }
 

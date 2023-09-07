@@ -121,18 +121,19 @@ public class CampaignService {
             for (Campaign campaign : campaigns) {
                 if (campaign.getReduceType() == ReduceType.BY_PERCENT) {
                     Double promotionalPrice = 1 - (campaign.getReducedPrice()/100.0);
-                    System.out.println(promotionalPrice);
                     for (Product product : campaign.getProducts()) {
                         double promotionalPriceDouble = product.getSalePrice() * promotionalPrice;
                         int roundedPromotionalPrice = (int) Math.round(promotionalPriceDouble);
 
                         product.setPromotionalPrice(roundedPromotionalPrice);
+                        product.setIsOnPromotional(true);
                         productRepository.save(product);
                     }
                 } else if (campaign.getReduceType() == ReduceType.BY_PRICE) {
                     Integer promotionalPrice = campaign.getReducedPrice();
                     for (Product product : campaign.getProducts()) {
                         product.setPromotionalPrice(product.getSalePrice() - promotionalPrice);
+                        product.setIsOnPromotional(true);
                         productRepository.save(product);
                     }
                 }
@@ -149,6 +150,7 @@ public class CampaignService {
             for (Campaign campaign : campaigns) {
                 for (Product product : campaign.getProducts()) {
                     product.setPromotionalPrice(0);
+                    product.setIsOnPromotional(false);
                     productRepository.save(product);
                 }
                 logger.info("Chương trình khuyến mãi " + campaign.getTitle() + " đã dừng");
